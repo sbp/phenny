@@ -123,6 +123,8 @@ def wikipedia(term, last=False):
 
 def wik(phenny, input): 
    origterm = input.groups()[1]
+   origterm = origterm.encode('utf-8')
+
    term = urllib.unquote(origterm)
    if not term: 
       return phenny.say(origin.sender, 'Maybe you meant ".wik Zen"?')

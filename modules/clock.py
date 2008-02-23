@@ -187,7 +187,7 @@ TimeZones.update(TZ1)
 @deprecated
 def f_time(self, origin, match, args): 
    """.t [ <timezone> ] - Returns the current time"""
-   tz = match.group(1) or 'GMT'
+   tz = match.group(2) or 'GMT'
 
    # Personal time zones, because they're rad
    if hasattr(self.config, 'timezones'): 
@@ -196,7 +196,7 @@ def f_time(self, origin, match, args):
 
    if People.has_key(tz): 
       tz = People[tz]
-   elif (not match.group(1)) and People.has_key(origin.nick): 
+   elif (not match.group(2)) and People.has_key(origin.nick): 
       tz = People[origin.nick]
 
    TZ = tz.upper()

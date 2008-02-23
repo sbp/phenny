@@ -30,10 +30,14 @@ def search(query, n=1):
 
 def result(query): 
    results = search(query)
-   return results['results'][0]['url']
+   if results['results']: 
+      return results['results'][0]['url']
+   return None
 
 def count(query): 
    results = search(query)
+   if not results['results']: 
+      return '0'
    return results['estimatedCount']
 
 def formatnumber(n): 
@@ -44,8 +48,11 @@ def formatnumber(n):
    return ''.join(parts)
 
 def g(phenny, input): 
-   uri = result(input.group(2))
-   phenny.reply(uri)
+   query = input.group(2)
+   uri = result(query)
+   if uri: 
+      phenny.reply(uri)
+   else: phenny.reply("No results found for '%s'." % query)
 g.commands = ['g']
 g.priority = 'high'
 
@@ -60,7 +67,7 @@ r_query = re.compile(
    r'\+?"[^"\\]*(?:\\.[^"\\]*)*"|\[[^]\\]*(?:\\.[^]\\]*)*\]|\S+'
 )
 
-def compare(phenny, input): 
+def gcs(phenny, input): 
    queries = r_query.findall(input.group(2))
    if len(queries) > 6: 
       return phenny.reply('Sorry, can only compare up to six things.')
@@ -76,7 +83,7 @@ def compare(phenny, input):
    results = [(term, n) for (n, term) in reversed(sorted(results))]
    reply = ', '.join('%s (%s)' % (t, formatnumber(n)) for (t, n) in results)
    phenny.say(reply)
-compare.commands = ['gco', 'comp']
+gcs.commands = ['gcs']
 
 if __name__ == '__main__': 
    print __doc__.strip()

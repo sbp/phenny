@@ -13,8 +13,10 @@ def f_reload(phenny, input):
    """Reloads a module, for use by admins only.""" 
    if not input.admin: return
 
-   name = match.group(2)
-   module = getattr(__import__('modules.' + name), name)
+   name = input.group(2)
+   try: module = getattr(__import__('modules.' + name), name)
+   except ImportError: 
+      module = getattr(__import__('opt.' + name), name)
    reload(module)
 
    if hasattr(module, '__file__'): 
@@ -23,8 +25,8 @@ def f_reload(phenny, input):
       modified = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(mtime))
    else: modified = 'unknown'
 
-   self.register(vars(module))
-   self.bind_commands()
+   phenny.register(vars(module))
+   phenny.bind_commands()
 
    phenny.reply('%r (version: %s)' % (module, modified))
 f_reload.name = 'reload'

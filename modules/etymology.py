@@ -76,7 +76,7 @@ def etymology(word):
 def f_etymology(self, origin, match, args): 
    word = match.group(2)
 
-   try: result = etymology(word)
+   try: result = etymology(word.encode('utf-8'))
    except IOError: 
       msg = "Can't connect to etymonline.com (%s)" % (etyuri % word)
       self.msg(origin.sender, msg)

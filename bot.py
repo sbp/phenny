@@ -7,7 +7,7 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import sys, os, re, time, threading, optparse
+import sys, os, re, threading, imp
 import irc
 
 home = os.getcwd()
@@ -31,20 +31,29 @@ class Phenny(irc.Bot):
    def setup(self): 
       self.variables = {}
 
+      filenames = []
       if not hasattr(self.config, 'enable'): 
-         load = [('modules', filename[:-3]) 
-                 for filename in os.listdir(os.path.join(home, 'modules'))
-                 if filename.endswith('.py') and
-                 not filename.startswith('_') and 
-                 not filename[:-3] in self.config.disable]
-      else: load = [('modules', e) for e in self.config.enable]
+         for fn in os.listdir(os.path.join(home, 'modules')): 
+            if fn.endswith('.py') and not fn.startswith('_'): 
+               filenames.append(os.path.join(home, 'modules', fn))
+      else: 
+         for fn in self.config.enable: 
+            filenames.append(os.path.join(home, 'modules', fn + '.py'))
+      # @@ exclude
 
-      if hasattr(self.config, 'opt'): 
-         load += [('opt', o) for o in self.config.opt]
+      if hasattr(self.config, 'extra'): 
+         for fn in self.config.extra: 
+            if os.path.isfile(fn): 
+               filenames.append(fn)
+            elif os.path.isdir(fn): 
+               for n in os.listdir(fn): 
+                  if n.endswith('.py') and not n.startswith('_'): 
+                     filenames.append(os.path.join(fn, n))
 
       modules = []
-      for package, name in load: 
-         try: module = getattr(__import__(package + '.' + name), name)
+      for filename in filenames: 
+         name = os.path.basename(filename)[:-3]
+         try: module = imp.load_source(name, filename)
          except Exception, e: 
             print >> sys.stderr, "Error loading %s: %s" % (name, e)
          else: 

@@ -67,21 +67,24 @@ def translate(phrase, lang, target='en'):
    return None
 
 def tr(phenny, input): 
+   """Translates a phrase, with an optional language hint."""
    lang, phrase = input.groups()
-
+   phrase = phrase.encode('utf-8')
    if (len(phrase) > 350) and (not phenny.admin(input.nick)): 
       return phenny.reply('Phrase must be under 350 characters.')
 
    language = guess_language(phrase)
    if language is None: 
       return phenny.reply('Unable to guess the language, sorry.')
+   else: language = lang.encode('utf-8')
 
    if language != 'en': 
       translation = translate(phrase, language)
       if translation is not None: 
-         return phenny.reply(u'"%s" (%s)' % (translation, language))
+         translation = translation.decode('utf-8').encode('utf-8')
+         return phenny.reply('"%s" (%s)' % (translation, language))
 
-      error = "I think it's %s, but I can't translate that language."
+      error = "I think it's %s, which I can't translate."
       return phenny.reply(error % language.title())
 
    # Otherwise, it's English, so mangle it for fun
@@ -93,10 +96,11 @@ def tr(phenny, input):
       return phenny.reply(u'"%s" (en-unmangled)' % phrase)
    return phenny.reply("I think it's English already.")
    # @@ or 'Why but that be English, sire.'
-tr.doc = ('phenny: "<phrase>"? or phenny: <lang> "<phrase>"?', 
-   'Translate <phrase>, optionally forcing the <lang> interpretation.')
 tr.rule = ('$nick', ur'(?:([a-z]{2}) +)?["“](.+?)["”]\? *$')
+tr.example = '$nickname: "mon chien"? or $nickname: fr "mon chien"?'
 tr.priority = 'low'
+
+# @@ mangle
 
 if __name__ == '__main__': 
    print __doc__.strip()

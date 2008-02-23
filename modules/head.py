@@ -7,7 +7,7 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import re, urllib
+import re, urllib, urlparse
 from htmlentitydefs import name2codepoint
 import web
 from tools import deprecated
@@ -66,7 +66,7 @@ def f_title(self, origin, match, args):
             status = str(info[1])
             info = info[0]
          if status.startswith('3'): 
-            uri = info['Location']
+            uri = urlparse.urljoin(uri, info['Location'])
          else: break
 
          redirects += 1

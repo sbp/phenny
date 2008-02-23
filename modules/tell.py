@@ -59,6 +59,10 @@ def f_remind(phenny, input):
 
    # @@ Multiple comma-separated tellees? Cf. Terje, #swhack, 2006-04-15
    verb, tellee, msg = input.groups()
+   verb = verb.encode('utf-8')
+   tellee = tellee.encode('utf-8')
+   msg = msg.encode('utf-8')
+
    tellee_original = tellee.rstrip(',:;')
    tellee = tellee.lower()
 

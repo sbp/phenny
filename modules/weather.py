@@ -26,7 +26,7 @@ def json(text):
    raise ValueError('Input must be serialised JSON.')
 
 def location(name): 
-   name = urllib.quote(name)
+   name = urllib.quote(name.encode('utf-8'))
    uri = 'http://ws.geonames.org/searchJSON?q=%s&maxRows=1' % name
    for i in xrange(10): 
       u = urllib.urlopen(uri)

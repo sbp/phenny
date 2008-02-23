@@ -41,10 +41,20 @@ class Bot(asynchat.async_chat):
       import threading
       self.sending = threading.RLock()
 
-   def write(self, args, text=None): 
+   def __write(self, args, text=None): 
+      # print '%r %r %r' % (self, args, text)
       if text is not None: 
          self.push(' '.join(args) + ' :' + text + '\r\n')
       else: self.push(' '.join(args) + '\r\n')
+
+   def write(self, args, text=None): 
+      # This is a safe version of __write
+      try: 
+         args = [arg.encode('utf-8') for arg in args]
+         if text is not None: 
+            text = text.encode('utf-8')
+         self.__write(args, text)
+      except Exception, e: pass
 
    def run(self, host, port=6667): 
       self.initiate_connect(host, port)
@@ -103,6 +113,10 @@ class Bot(asynchat.async_chat):
          try: text = text.encode('utf-8')
          except UnicodeEncodeError, e: 
             text = e.__class__ + ': ' + str(e)
+      if isinstance(recipient, unicode): 
+         try: recipient = recipient.encode('utf-8')
+         except UnicodeEncodeError, e: 
+            return
 
       # No messages within the last 3 seconds? Go ahead!
       # Otherwise, wait so it's been at least 0.8 seconds + penalty
@@ -115,14 +129,14 @@ class Bot(asynchat.async_chat):
                time.sleep(wait - elapsed)
 
       # Loop detection
-      messages = [m[1] for m in self.stack[-5:]]
-      if messages.count(text) >= 3: 
+      messages = [m[1] for m in self.stack[-8:]]
+      if messages.count(text) >= 5: 
          text = '...'
-         if messages.count('...') >= 1: 
+         if messages.count('...') >= 3: 
             self.sending.release()
             return
 
-      self.write(('PRIVMSG', recipient), text)
+      self.__write(('PRIVMSG', recipient), text)
       self.stack.append((time.time(), text))
       self.stack = self.stack[-10:]
 
