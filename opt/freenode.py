@@ -20,13 +20,15 @@ def replaced(phenny, input):
       'v': '.v has been replaced by .val', 
       'validate': '.validate has been replaced by .validate', 
       'thesaurus': ".thesaurus hasn't been ported to my new codebase yet", 
-      'rate': ".rate hasn't been ported to my new codebase yet, sorry!", 
-      'rates': ".rates hasn't been ported to my new codebase yet, sorry!"
+      'rates': "moon wanter. moOOoon wanter!", 
+      'web': 'the .web command has been removed; ask sbp for details', 
+      'mangle': ".mangle hasn't been ported to my new codebase yet", 
+      'origin': ".origin hasn't been ported to my new codebase yet"
    }[command]
    phenny.reply(response)
 replaced.commands = [
    'cp', 'pc', 'unicode', 'compare', 'map', 'acronym', 'img', 
-   'v', 'validate', 'thesaurus', 'rate', 'rates'
+   'v', 'validate', 'thesaurus', 'rates', 'web', 'mangle', 'origin'
 ]
 replaced.priority = 'low'
 

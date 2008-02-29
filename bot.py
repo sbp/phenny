@@ -79,17 +79,16 @@ class Phenny(irc.Bot):
       
       def bind(self, priority, regexp, func): 
          print priority, regexp.pattern.encode('utf-8'), func
-         self.commands[priority].setdefault(regexp, []).append(func)
-         # @@ register documentation
+         # register documentation
+         if not hasattr(func, 'name'): 
+            func.name = func.__name__
          if func.__doc__: 
-            if hasattr(func, 'name'): 
-               name = func.name
-            else: name = func.__name__
             if hasattr(func, 'example'): 
                example = func.example
                example = example.replace('$nickname', self.nick)
             else: example = None
-            self.doc[name] = (func.__doc__, example)
+            self.doc[func.name] = (func.__doc__, example)
+         self.commands[priority].setdefault(regexp, []).append(func)
 
       def sub(pattern, self=self): 
          # These replacements have significant order
@@ -127,8 +126,8 @@ class Phenny(irc.Bot):
                   prefix = self.config.prefix
                   commands, pattern = func.rule
                   for command in commands: 
-                     command = r'(%s) +' % command
-                     regexp = re.compile(prefix + command + pattern)
+                     command = r'(%s)(?: +(?:%s))?' % (command, pattern)
+                     regexp = re.compile(prefix + command)
                      bind(self, func.priority, regexp, func)
 
                # 3) e.g. ('$nick', ['p', 'q'], '(.*)')
@@ -196,8 +195,6 @@ class Phenny(irc.Bot):
    
                match = regexp.match(text)
                if match: 
-                  # print 'STATS:', origin.sender, func.__name__
-
                   phenny = self.wrapped(origin, text, match)
                   input = self.input(origin, text, bytes, match, event)
 
@@ -206,6 +203,11 @@ class Phenny(irc.Bot):
                      t = threading.Thread(target=self.call, args=args)
                      t.start()
                   else: self.call(func, origin, phenny, input)
+
+                  for source in [origin.sender, origin.nick]: 
+                     try: self.stats[(func.name, source)] += 1
+                     except KeyError: 
+                        self.stats[(func.name, source)] = 1
 
 if __name__ == '__main__': 
    print __doc__

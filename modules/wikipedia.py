@@ -55,6 +55,7 @@ def search(term):
    else: return term
 
 def wikipedia(term, last=False): 
+   global wikiuri
    bytes = web.get(wikiuri % urllib.quote(term))
    bytes = r_tr.sub('', bytes)
 
@@ -83,7 +84,8 @@ def wikipedia(term, last=False):
                           and not 'disambiguation)"' in para) 
                           and not '(images and media)' in para
                           and not 'This article contains a' in para 
-                          and not 'id="coordinates"' in para]
+                          and not 'id="coordinates"' in para
+                          and not 'class="thumb' in para]
 
    for i, para in enumerate(paragraphs): 
       para = para.replace('<sup>', '|')
@@ -119,7 +121,9 @@ def wikipedia(term, last=False):
       return None
 
    sentence = '"' + sentence.replace('"', "'") + '"'
-   return sentence + ' - ' + (wikiuri % term)
+   sentence = sentence.decode('utf-8').encode('utf-8')
+   wikiuri = wikiuri.encode('utf-8')
+   return sentence + ' - ' + (wikiuri % term.encode('utf-8'))
 
 def wik(phenny, input): 
    origterm = input.groups()[1]

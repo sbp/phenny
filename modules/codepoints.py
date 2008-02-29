@@ -21,7 +21,8 @@ def about(u, cp=None, name=None):
 
 def codepoint_simple(arg): 
    arg = arg.upper()
-   r_label = re.compile('\\b' + arg.replace(' ', '.*\\b'))
+
+   r_label = re.compile('\\b' + arg.replace(' ', '.*\\b') + '\\b')
 
    results = []
    for cp in xrange(0xFFFF): 
@@ -31,6 +32,16 @@ def codepoint_simple(arg):
 
       if r_label.search(name): 
          results.append((len(name), u, cp, name))
+   if not results: 
+      r_label = re.compile('\\b' + arg.replace(' ', '.*\\b'))
+      for cp in xrange(0xFFFF): 
+         u = unichr(cp)
+         try: name = unicodedata.name(u)
+         except ValueError: continue
+
+         if r_label.search(name): 
+            results.append((len(name), u, cp, name))
+
    if not results: 
       return None
 

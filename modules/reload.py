@@ -14,6 +14,10 @@ def f_reload(phenny, input):
    if not input.admin: return
 
    name = input.group(2)
+   if not name: 
+      phenny.setup()
+      return phenny.reply('done')
+
    try: module = getattr(__import__('modules.' + name), name)
    except ImportError: 
       module = getattr(__import__('opt.' + name), name)
@@ -30,7 +34,8 @@ def f_reload(phenny, input):
 
    phenny.reply('%r (version: %s)' % (module, modified))
 f_reload.name = 'reload'
-f_reload.rule = ('$nick', ['reload'], r'(\S+)')
+f_reload.rule = ('$nick', ['reload'], r'(\S+)?')
+f_reload.priority = 'low'
 
 if __name__ == '__main__': 
    print __doc__.strip()
