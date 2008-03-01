@@ -3,4 +3,4 @@
 # Licensed under the Eiffel Forum License 2.
 
 archive: ;
-        hg archive -t tbz2 phenny.tar.bz2
+	hg archive -t tbz2 phenny.tar.bz2

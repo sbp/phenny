@@ -12,7 +12,10 @@ from itertools import islice
 
 def about(u, cp=None, name=None): 
    if cp is None: cp = ord(u)
-   if name is None: name = unicodedata.name(u)
+   if name is None: 
+      try: name = unicodedata.name(u)
+      except ValueError: 
+         return 'U+%04X (No name found)' % cp
 
    if not unicodedata.combining(u): 
       template = 'U+%04X %s (%s)'

@@ -49,7 +49,8 @@ def search(term):
       return term
 
    term = term.replace('_', ' ')
-   uri = google.google('site:en.wikipedia.org %s' % term)
+   try: uri = google.google('site:en.wikipedia.org %s' % term)
+   except IndexError: return term
    if uri: 
       return uri[len('http://en.wikipedia.org/wiki/'):]
    else: return term

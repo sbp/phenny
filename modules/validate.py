@@ -33,7 +33,7 @@ def val(phenny, input):
             else: result += ' (%s error)' % n
    else: result += 'Unvalidatable: no X-W3C-Validator-Status'
 
-   phenny.say(' ' + result)
+   phenny.reply(result)
 val.rule = (['val'], r'(?i)(\S+)')
 val.example = '.val http://www.w3.org/'
 
