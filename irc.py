@@ -65,7 +65,9 @@ class Bot(asynchat.async_chat):
          print >> sys.stderr, message,
       self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
       self.connect((host, port))
-      asyncore.loop()
+      try: asyncore.loop()
+      except KeyboardInterrupt: 
+         sys.exit()
 
    def handle_connect(self): 
       if self.verbose: 

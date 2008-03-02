@@ -38,8 +38,12 @@ def run_phenny(config):
 
    Watcher()
    while True: 
-      connect(config)
-      if not isinstance(delay, int): break
+      try: connect(config)
+      except KeyboardInterrupt: 
+         sys.exit()
+
+      if not isinstance(delay, int): 
+         break
 
       warning = 'Warning: Disconnected. Reconnecting in %s seconds...' % delay
       print >> sys.stderr, warning
@@ -47,7 +51,9 @@ def run_phenny(config):
 
 def run(config): 
    t = threading.Thread(target=run_phenny, args=(config,))
-   t.start()
+   if hasattr(t, 'run'): 
+      t.run()
+   else: t.start()
 
 if __name__ == '__main__': 
    print __doc__
