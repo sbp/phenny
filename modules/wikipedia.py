@@ -43,13 +43,13 @@ def text(html):
    return unescape(html).strip()
 
 def search(term): 
-   try: import google
+   try: import search
    except ImportError, e: 
       print e
       return term
 
    term = term.replace('_', ' ')
-   try: uri = google.google('site:en.wikipedia.org %s' % term)
+   try: uri = search.result('site:en.wikipedia.org %s' % term)
    except IndexError: return term
    if uri: 
       return uri[len('http://en.wikipedia.org/wiki/'):]
