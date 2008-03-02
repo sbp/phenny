@@ -11,7 +11,8 @@ import re, unicodedata
 from itertools import islice
 
 def about(u, cp=None, name=None): 
-   if cp is None: cp = ord(u)
+   if cp is None: 
+      cp = ord(u)
    if name is None: 
       try: name = unicodedata.name(u)
       except ValueError: 
@@ -65,16 +66,27 @@ def codepoint_extended(arg):
 
 def u(phenny, input): 
    arg = input.bytes[3:]
+   # phenny.msg('#inamidst', '%r' % arg)
+   if not arg: 
+      return phenny.reply('You gave me zero length input.')
 
-   ascii = True
-   for c in arg: 
-      if ord(c) >= 0x80: 
-         ascii = False
+   # @@ space
+   if set(arg.upper()) - set(
+      'ABCDEFGHIJKLMNOPQRSTUVWYXYZ0123456789- .?+*{}[]\\/^$'): 
+      printable = False
+   else: printable = True
 
-   if ascii: 
-      if set(arg.upper()) - set('ABCDEFGHIJKLMNOPQRSTUVWXYZ '): 
-         extended = True
-      else: extended = False
+   if printable: 
+      extended = False
+      for c in '.?+*{}[]\\/^$': 
+         if c in arg: 
+            extended = True
+            break
+
+      if len(arg) == 4: 
+         try: u = unichr(int(arg, 16))
+         except ValueError: pass
+         else: return phenny.say(about(u))
 
       if extended: 
          # look up a codepoint with regexp
@@ -84,6 +96,8 @@ def u(phenny, input):
                phenny.say(result)
             elif (i == 2) and (len(results) > 3): 
                phenny.say(result + ' [...]')
+         if not results: 
+            phenny.reply('Sorry, no results')
       else: 
          # look up a codepoint freely
          result = codepoint_simple(arg)
@@ -97,7 +111,15 @@ def u(phenny, input):
          for u in text: 
             phenny.say(about(u))
       # look up more than three podecoints
-      elif len(text) <= 8: 
+      elif len(text) <= 10: 
          phenny.reply(' '.join('U+%04X' % ord(c) for c in text))
       else: phenny.reply('Sorry, your input is too long!')
 u.commands = ['u']
+
+def bytes(phenny, input): 
+   b = input.bytes
+   phenny.reply('%r' % b[b.find(' ') + 1:])
+bytes.commands = ['bytes']
+
+if __name__ == '__main__': 
+   print __doc__.strip()

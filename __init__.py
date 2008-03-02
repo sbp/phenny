@@ -7,8 +7,25 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import sys, time, threading
+import sys, os, time, threading, signal
 import bot
+
+class Watcher(object): 
+   # Cf. http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/496735
+   def __init__(self):
+      self.child = os.fork()
+      if self.child != 0: 
+         self.watch()
+
+   def watch(self):
+      try: os.wait()
+      except KeyboardInterrupt:
+         self.kill()
+      sys.exit()
+
+   def kill(self):
+      try: os.kill(self.child, signal.SIGKILL)
+      except OSError: pass
 
 def run_phenny(config): 
    if hasattr(config, 'delay'): 
@@ -19,6 +36,7 @@ def run_phenny(config):
       p = bot.Phenny(config)
       p.run(config.host)
 
+   Watcher()
    while True: 
       connect(config)
       if not isinstance(delay, int): break
