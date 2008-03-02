@@ -57,7 +57,9 @@ def search(term):
 
 def wikipedia(term, last=False): 
    global wikiuri
-   bytes = web.get(wikiuri % urllib.quote(term))
+   if not '%' in term: 
+      bytes = web.get(wikiuri % urllib.quote(term))
+   else: bytes = web.get(wikiuri % term)
    bytes = r_tr.sub('', bytes)
 
    if not last: 
@@ -123,8 +125,9 @@ def wikipedia(term, last=False):
 
    sentence = '"' + sentence.replace('"', "'") + '"'
    sentence = sentence.decode('utf-8').encode('utf-8')
-   wikiuri = wikiuri.encode('utf-8')
-   return sentence + ' - ' + (wikiuri % term.encode('utf-8'))
+   wikiuri = wikiuri.decode('utf-8').encode('utf-8')
+   term = term.decode('utf-8').encode('utf-8')
+   return sentence + ' - ' + (wikiuri % term)
 
 def wik(phenny, input): 
    origterm = input.groups()[1]
