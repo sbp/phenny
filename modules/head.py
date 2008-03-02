@@ -145,4 +145,4 @@ noteuri.rule = r'.*(http://[^<> "]+)[,.]?'
 noteuri.priority = 'low'
 
 if __name__ == '__main__': 
-   print __doc__
+   print __doc__.strip()

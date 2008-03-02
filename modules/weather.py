@@ -419,4 +419,4 @@ def f_weather(self, origin, match, args):
 f_weather.rule = (['weather'], r'(.*)')
 
 if __name__ == '__main__': 
-   print __doc__
+   print __doc__.strip()
