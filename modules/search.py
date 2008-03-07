@@ -49,6 +49,8 @@ def formatnumber(n):
 
 def g(phenny, input): 
    query = input.group(2)
+   if not query: 
+      return phenny.reply('.g what?')
    uri = result(query)
    if uri: 
       phenny.reply(uri)
@@ -58,6 +60,8 @@ g.priority = 'high'
 
 def gc(phenny, input): 
    query = input.group(2)
+   if not query: 
+      return phenny.reply('.gc what?')
    num = count(query)
    phenny.say(query + ': ' + num)
 gc.commands = ['gc']
@@ -83,7 +87,7 @@ def gcs(phenny, input):
    results = [(term, n) for (n, term) in reversed(sorted(results))]
    reply = ', '.join('%s (%s)' % (t, formatnumber(n)) for (t, n) in results)
    phenny.say(reply)
-gcs.commands = ['gcs']
+gcs.commands = ['gcs', 'comp']
 
 if __name__ == '__main__': 
    print __doc__.strip()

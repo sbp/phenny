@@ -29,6 +29,8 @@ subs = [
 
 def calc(phenny, input): 
    q = input.group(2)
+   if not q: 
+      return phenny.say('0?')
 
    query = q[:]
    for a, b in subs: 

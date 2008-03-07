@@ -131,12 +131,11 @@ def wikipedia(term, last=False):
 
 def wik(phenny, input): 
    origterm = input.groups()[1]
+   if not origterm: 
+      return phenny.say('Perhaps you meant ".wik Zen"?')
    origterm = origterm.encode('utf-8')
 
    term = urllib.unquote(origterm)
-   if not term: 
-      return phenny.say(origin.sender, 'Maybe you meant ".wik Zen"?')
-
    term = term[0].upper() + term[1:]
    term = term.replace(' ', '_')
 
