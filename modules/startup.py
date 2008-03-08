@@ -8,6 +8,9 @@ http://inamidst.com/phenny/
 """
 
 def startup(phenny, input): 
+   if hasattr(phenny.config, 'serverpass'): 
+      phenny.write(('PASS', phenny.config.serverpass))
+
    if hasattr(phenny.config, 'password'): 
       phenny.msg('NickServ', 'IDENTIFY %s' % phenny.config.password)
       __import__('time').sleep(5)
