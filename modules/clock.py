@@ -186,7 +186,7 @@ TimeZones.update(TZ1)
 
 @deprecated
 def f_time(self, origin, match, args): 
-   """.t [ <timezone> ] - Returns the current time"""
+   """Returns the current time."""
    tz = match.group(2) or 'GMT'
 
    # Personal time zones, because they're rad
@@ -231,8 +231,11 @@ def f_time(self, origin, match, args):
          msg = time.strftime("%a, %d %b %Y %H:%M:%S " + str(tz), timenow)
          self.msg(origin.sender, msg)
 f_time.commands = ['t']
+f_time.name = 't'
+f_time.example = '.t UTC'
 
 def beats(phenny, input): 
+   """Shows the internet time in Swatch beats."""
    beats = ((time.time() + 3600) % 86400) / 86.4
    beats = int(math.floor(beats))
    phenny.say('@%03i' % beats)
@@ -243,6 +246,7 @@ def divide(input, by):
    return (input / by), (input % by)
 
 def yi(phenny, input): 
+   """Shows whether it is currently yi or not."""
    quadraels, remainder = divide(int(time.time()), 1753200)
    raels = quadraels * 4
    extraraels, remainder = divide(remainder, 432000)
@@ -255,6 +259,7 @@ yi.priority = 'low'
 # d8uv d8uv d8uv d8uv d8uv d8uv d8uv
 
 def tock(phenny, input): 
+   """Shows the time from the USNO's atomic clock."""
    u = urllib.urlopen('http://tycho.usno.navy.mil/cgi-bin/timer.pl')
    info = u.info()
    u.close()

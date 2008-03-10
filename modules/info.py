@@ -41,6 +41,7 @@ help.rule = ('$nick', r'(?i)help(?:[?!]+)?$')
 help.priority = 'low'
 
 def stats(phenny, input): 
+   """Show information on command usage patterns."""
    commands = {}
    users = {}
    channels = {}

@@ -48,6 +48,7 @@ def formatnumber(n):
    return ''.join(parts)
 
 def g(phenny, input): 
+   """Queries Google for the specified input."""
    query = input.group(2)
    if not query: 
       return phenny.reply('.g what?')
@@ -57,8 +58,10 @@ def g(phenny, input):
    else: phenny.reply("No results found for '%s'." % query)
 g.commands = ['g']
 g.priority = 'high'
+g.example = '.g swhack'
 
 def gc(phenny, input): 
+   """Returns the number of Google results for the specified input."""
    query = input.group(2)
    if not query: 
       return phenny.reply('.gc what?')
@@ -66,6 +69,7 @@ def gc(phenny, input):
    phenny.say(query + ': ' + num)
 gc.commands = ['gc']
 gc.priority = 'high'
+gc.example = '.gc extrapolate'
 
 r_query = re.compile(
    r'\+?"[^"\\]*(?:\\.[^"\\]*)*"|\[[^]\\]*(?:\\.[^]\\]*)*\]|\S+'

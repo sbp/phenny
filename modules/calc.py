@@ -28,6 +28,7 @@ subs = [
 ]
 
 def calc(phenny, input): 
+   """Use the Frink online calculator."""
    q = input.group(2)
    if not q: 
       return phenny.say('0?')
@@ -63,6 +64,7 @@ def calc(phenny, input):
       phenny.say(q + ' = ' + result)
    else: phenny.reply("Sorry, can't calculate that.")
 calc.commands = ['calc']
+calc.example = '.calc 5 + 3'
 
 if __name__ == '__main__': 
    print __doc__.strip()

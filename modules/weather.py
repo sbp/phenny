@@ -84,6 +84,9 @@ def f_weather(self, origin, match, args):
       if args[0].startswith('.weather '): return
 
    icao_code = match.group(2)
+   if not icao_code: 
+      return self.msg(origin.sender, 'Try .weather London, for example?')
+
    if (not len(icao_code) == 4) or \
       (len(icao_code) > 1 and icao_code[0] in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' and 
                          icao_code[1] in 'abcdefghijklmnopqrstuvwxyz'): 

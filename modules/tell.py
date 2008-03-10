@@ -40,7 +40,8 @@ def dumpReminders(fn, data):
       for remindon in data[tellee]: 
          line = '\t'.join((tellee,) + remindon)
          f.write(line + '\n')
-   f.close()
+   try: f.close()
+   except IOError: pass
    return True
 
 def setup(self): 

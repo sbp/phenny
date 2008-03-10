@@ -65,6 +65,7 @@ def codepoint_extended(arg):
          yield about(u, cp, name)
 
 def u(phenny, input): 
+   """Look up unicode information."""
    arg = input.bytes[3:]
    # phenny.msg('#inamidst', '%r' % arg)
    if not arg: 
@@ -115,11 +116,14 @@ def u(phenny, input):
          phenny.reply(' '.join('U+%04X' % ord(c) for c in text))
       else: phenny.reply('Sorry, your input is too long!')
 u.commands = ['u']
+u.example = '.u 203D'
 
 def bytes(phenny, input): 
+   """Show the input as pretty printed bytes."""
    b = input.bytes
    phenny.reply('%r' % b[b.find(' ') + 1:])
 bytes.commands = ['bytes']
+bytes.example = '.bytes \xe3\x8b\xa1'
 
 if __name__ == '__main__': 
    print __doc__.strip()

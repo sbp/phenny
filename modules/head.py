@@ -67,7 +67,9 @@ def f_title(self, origin, match, args):
    uri = (uri or '').encode('utf-8')
 
    if not uri and hasattr(self, 'last_seen_uri'): 
-      uri = self.last_seen_uri
+      uri = self.last_seen_uri.get('#swhack')
+   if not uri: 
+      return phenny.msg(origin.sender, 'I need a URI to give the title of...')
 
    if not ':' in uri: 
       uri = 'http://' + uri
@@ -140,7 +142,9 @@ f_title.commands = ['title']
 
 def noteuri(phenny, input): 
    uri = input.group(1).encode('utf-8')
-   phenny.bot.last_seen_uri = uri
+   if not hasattr(phenny.bot, 'last_seen_uri'): 
+      phenny.bot.last_seen_uri = {}
+   phenny.bot.last_seen_uri[input.sender] = uri
 noteuri.rule = r'.*(http://[^<> "]+)[,.]?'
 noteuri.priority = 'low'
 

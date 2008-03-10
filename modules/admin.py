@@ -8,22 +8,27 @@ http://inamidst.com/phenny/
 """
 
 def join(phenny, input): 
+   """Join the specified channel. This is an admin-only command."""
    # Can only be done in privmsg by an admin
    if input.sender.startswith('#'): return
    if input.admin: 
       phenny.write(['JOIN'], input.group(2))
 join.commands = ['join']
 join.priority = 'low'
+join.example = '.join #example'
 
 def part(phenny, input): 
+   """Part the specified channel. This is an admin-only command."""
    # Can only be done in privmsg by an admin
    if input.sender.startswith('#'): return
    if input.admin: 
       phenny.write(['PART'], input.group(2))
 part.commands = ['part']
 part.priority = 'low'
+part.example = '.part #example'
 
 def quit(phenny, input): 
+   """Quit from the server. This is an owner-only command."""
    # Can only be done in privmsg by the owner
    if input.sender.startswith('#'): return
    if input.owner: 

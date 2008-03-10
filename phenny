@@ -29,6 +29,7 @@ def create_default_config(fn):
    host = 'irc.example.net'
    channels = ['#example', '#test']
    owner = 'yournickname'
+   # serverpass = 'yourserverpassword'
 
    # These are people who will be able to use admin.py's functions...
    admins = [owner, 'someoneyoutrust']
