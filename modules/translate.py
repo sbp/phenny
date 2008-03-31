@@ -68,9 +68,10 @@ def translate(phrase, lang, target='en'):
 
 def tr(phenny, input): 
    """Translates a phrase, with an optional language hint."""
-   input, output, phrase = input.groups()
+   original_input = input
+   input, output, phrase = original_input.groups()
    phrase = phrase.encode('utf-8')
-   if (len(phrase) > 350) and (not phenny.admin(input.nick)): 
+   if (len(phrase) > 350) and (not original_input.admin): 
       return phenny.reply('Phrase must be under 350 characters.')
 
    input = input or guess_language(phrase)

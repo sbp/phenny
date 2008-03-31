@@ -18,6 +18,7 @@ def deprecated(old):
       args = [input.bytes, input.sender, '@@']
 
       old(self, origin, match, args)
+   new.__module__ = old.__module__
    new.__name__ = old.__name__
    return new
 

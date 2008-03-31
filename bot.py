@@ -161,9 +161,9 @@ class Phenny(irc.Bot):
 
       return PhennyWrapper(self)
 
-   def input(self, origin, text, bytes, match, event): 
+   def input(self, origin, text, bytes, match, event, args): 
       class CommandInput(unicode): 
-         def __new__(cls, text, origin, bytes, match, event): 
+         def __new__(cls, text, origin, bytes, match, event, args): 
             s = unicode.__new__(cls, text)
             s.sender = origin.sender
             s.nick = origin.nick
@@ -172,19 +172,28 @@ class Phenny(irc.Bot):
             s.match = match
             s.group = match.group
             s.groups = match.groups
+            s.args = args
             s.admin = origin.nick in self.config.admins
             s.owner = origin.nick == self.config.owner
             return s
 
-      return CommandInput(text, origin, bytes, match, event)
+      return CommandInput(text, origin, bytes, match, event, args)
 
    def call(self, func, origin, phenny, input): 
       try: func(phenny, input)
       except Exception, e: 
          self.error(origin)
 
+   def limit(self, origin, func): 
+      if origin.sender and origin.sender.startswith('#'): 
+         if hasattr(self.config, 'limit'): 
+            limits = self.config.limit.get(origin.sender)
+            if limits and (func.__module__ not in limits): 
+               return True
+      return False
+
    def dispatch(self, origin, args): 
-      bytes, event = args[0], args[1]
+      bytes, event, args = args[0], args[1], args[2:]
       text = decode(bytes)
 
       for priority in ('high', 'medium', 'low'): 
@@ -192,15 +201,17 @@ class Phenny(irc.Bot):
          for regexp, funcs in items: 
             for func in funcs: 
                if event != func.event: continue
-   
+
                match = regexp.match(text)
                if match: 
+                  if self.limit(origin, func): continue
+
                   phenny = self.wrapped(origin, text, match)
-                  input = self.input(origin, text, bytes, match, event)
+                  input = self.input(origin, text, bytes, match, event, args)
 
                   if func.thread: 
-                     args = (func, origin, phenny, input)
-                     t = threading.Thread(target=self.call, args=args)
+                     targs = (func, origin, phenny, input)
+                     t = threading.Thread(target=self.call, args=targs)
                      t.start()
                   else: self.call(func, origin, phenny, input)
 

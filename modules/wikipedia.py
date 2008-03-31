@@ -48,6 +48,10 @@ def search(term):
       print e
       return term
 
+   if isinstance(term, unicode): 
+      term = term.encode('utf-8')
+   else: term = term.decode('utf-8')
+
    term = term.replace('_', ' ')
    try: uri = search.result('site:en.wikipedia.org %s' % term)
    except IndexError: return term
@@ -58,7 +62,12 @@ def search(term):
 def wikipedia(term, last=False): 
    global wikiuri
    if not '%' in term: 
-      bytes = web.get(wikiuri % urllib.quote(term))
+      if isinstance(term, unicode): 
+         t = term.encode('utf-8')
+      else: t = term
+      q = urllib.quote(t)
+      u = wikiuri % q
+      bytes = web.get(u)
    else: bytes = web.get(wikiuri % term)
    bytes = r_tr.sub('', bytes)
 

@@ -65,7 +65,7 @@ def f_remind(phenny, input):
    msg = msg.encode('utf-8')
 
    tellee_original = tellee.rstrip(',:;')
-   tellee = tellee.lower()
+   tellee = tellee_original.lower()
 
    if not os.path.exists(phenny.tell_filename): 
       return
@@ -90,7 +90,7 @@ def f_remind(phenny, input):
 
       rand = random.random()
       if rand > 0.9999: response = "yeah, yeah"
-      elif rand > 0.999: response = "%s: yeah, sure, whatever" % teller
+      elif rand > 0.999: response = "yeah, sure, whatever"
 
       phenny.reply(response)
    elif teller.lower() == tellee: 
@@ -126,10 +126,10 @@ def message(phenny, input):
    reminders = []
    remkeys = list(reversed(sorted(phenny.reminders.keys())))
    for remkey in remkeys: 
-      if not remkey.endswith('*'): 
+      if not remkey.endswith('*') or remkey.endswith(':'): 
          if tellee.lower() == remkey: 
             reminders.extend(getReminders(phenny, channel, remkey, tellee))
-      elif tellee.lower().startswith(remkey.rstrip('*')): 
+      elif tellee.lower().startswith(remkey.rstrip('*:')): 
          reminders.extend(getReminders(phenny, channel, remkey, tellee))
 
    for line in reminders[:maximum]: 

@@ -42,7 +42,7 @@ def msg(phenny, input):
    if input.sender.startswith('#'): return
    if input.admin: 
       phenny.msg(input.group(2), input.group(3))
-msg.rule = (['msg'], r'(#\S+) (.*)')
+msg.rule = (['msg'], r'(#?\S+) (.*)')
 msg.priority = 'low'
 
 def me(phenny, input): 
@@ -51,7 +51,7 @@ def me(phenny, input):
    if input.admin: 
       msg = '\x01ACTION %s\x01' % input.group(3)
       phenny.msg(input.group(2), msg)
-me.rule = (['me'], r'(#\S+) (.*)')
+me.rule = (['me'], r'(#?\S+) (.*)')
 me.priority = 'low'
 
 if __name__ == '__main__': 

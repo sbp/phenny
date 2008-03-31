@@ -37,7 +37,7 @@ def create_default_config(fn):
    exclude = ['admin']
 
    # If you want to enumerate a list of modules rather than disabling
-   # some, use "enable = ['example']", which takes precedent over disable
+   # some, use "enable = ['example']", which takes precedent over exclude
    # 
    # enable = []
 
