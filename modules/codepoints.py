@@ -75,7 +75,9 @@ def u(phenny, input):
    if set(arg.upper()) - set(
       'ABCDEFGHIJKLMNOPQRSTUVWYXYZ0123456789- .?+*{}[]\\/^$'): 
       printable = False
-   else: printable = True
+   elif len(arg) > 1: 
+      printable = True
+   else: printable = False
 
    if printable: 
       extended = False

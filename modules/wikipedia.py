@@ -97,7 +97,8 @@ def wikipedia(term, last=False):
                           and not '(images and media)' in para
                           and not 'This article contains a' in para 
                           and not 'id="coordinates"' in para
-                          and not 'class="thumb' in para]
+                          and not 'class="thumb' in para 
+                          and not 'style="display:none"' in para]
 
    for i, para in enumerate(paragraphs): 
       para = para.replace('<sup>', '|')

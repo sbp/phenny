@@ -63,7 +63,7 @@ def translate(phrase, lang, target='en'):
       translation = translation.replace('\n', ' ')
       while '  ' in translation:
          translation = translation.replace('  ', ' ')
-      return translation
+      return translation.lower()
    return None
 
 def tr(phenny, input): 

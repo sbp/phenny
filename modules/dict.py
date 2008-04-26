@@ -113,7 +113,10 @@ def dict(phenny, input):
          if len(results[key]) > 1: 
             result += ', 2. ' + results[key][1]
          result += '; '
-   phenny.say(result.rstrip('; '))
+   result = result.rstrip('; ')
+   if result.endswith('-') and (len(result) < 30): 
+      phenny.reply('Sorry, no definition found.')
+   else: phenny.say(result)
 dict.commands = ['dict']
 
 if __name__ == '__main__': 

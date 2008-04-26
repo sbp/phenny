@@ -16,8 +16,8 @@ def doc(phenny, input):
       phenny.reply(phenny.doc[name][0])
       if phenny.doc[name][1]: 
          phenny.say('e.g. ' + phenny.doc[name][1])
-doc.rule = ('$nick', '(?i)help +([A-Za-z]+)(?:\?+)?$')
-doc.example = '$nickname: help tell?'
+doc.rule = ('$nick', '(?i)(?:help|doc) +([A-Za-z]+)(?:\?+)?$')
+doc.example = '$nickname: doc tell?'
 doc.priority = 'low'
 
 def commands(phenny, input): 

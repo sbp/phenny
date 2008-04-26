@@ -19,6 +19,7 @@ def json(text):
    if r_json.match(r_string.sub('', text)): 
       text = r_string.sub(lambda m: 'u' + m.group(1), text)
       return eval(text.strip(' \t\r\n'), env, {})
+   print text
    raise ValueError('Input must be serialised JSON.')
 
 def search(query, n=1): 
@@ -55,6 +56,9 @@ def g(phenny, input):
    uri = result(query)
    if uri: 
       phenny.reply(uri)
+      if not hasattr(phenny.bot, 'last_seen_uri'):
+         phenny.bot.last_seen_uri = {}
+      phenny.bot.last_seen_uri[input.sender] = uri
    else: phenny.reply("No results found for '%s'." % query)
 g.commands = ['g']
 g.priority = 'high'
