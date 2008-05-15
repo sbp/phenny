@@ -43,9 +43,12 @@ class Bot(asynchat.async_chat):
 
    def __write(self, args, text=None): 
       # print '%r %r %r' % (self, args, text)
-      if text is not None: 
-         self.push(' '.join(args) + ' :' + text + '\r\n')
-      else: self.push(' '.join(args) + '\r\n')
+      try: 
+         if text is not None: 
+            self.push(' '.join(args) + ' :' + text + '\r\n')
+         else: self.push(' '.join(args) + '\r\n')
+      except IndexError: 
+         pass
 
    def write(self, args, text=None): 
       # This is a safe version of __write

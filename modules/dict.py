@@ -109,7 +109,7 @@ def dict(phenny, input):
    result = input.group(2).encode('utf-8') + ' - '
    for key in sorted(results.keys()): 
       if results[key]: 
-         result += key + ' 1. ' + results[key][0]
+         result += (key or '') + ' 1. ' + results[key][0]
          if len(results[key]) > 1: 
             result += ', 2. ' + results[key][1]
          result += '; '

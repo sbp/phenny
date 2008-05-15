@@ -11,7 +11,7 @@ http://inamidst.com/phenny/
 import re, time
 import web
 
-r_translation = re.compile(r'<div style=padding:10px;>([^<]+)</div>')
+r_translation = re.compile(r'<div style="padding:\S+?;">([^<]+)</div>')
 
 def guess_language(phrase): 
    languages = {
@@ -40,15 +40,17 @@ def guess_language(phrase):
          if '_' in lang: 
             j = lang.find('_')
             lang = lang[:j]
-         try: return languages[lang]
+         try: return languages[lang].lower()
          except KeyError: 
-            return lang
+            return lang.lower()
    return 'Moon Language'
 
 def translate(phrase, lang, target='en'): 
-   babelfish = 'http://world.altavista.com/tr'
+   babelfish = 'http://uk.babelfish.yahoo.com/translate_txt'
    form = {
+      'ei': 'UTF-8', 
       'doit': 'done', 
+      'fr': 'bf-home', 
       'intl': '1', 
       'tt': 'urltext', 
       'trtext': phrase, 
@@ -89,7 +91,7 @@ def tr(phenny, input):
          else: return phenny.reply('"%s" (%s -> %s)' % \
                                    (translation, input, output))
 
-      error = "I think it's %s, which I can't translate."
+      error = "I think it's %s, but I can't translate it currently."
       return phenny.reply(error % input.title())
 
    # Otherwise, it's English, so mangle it for fun
