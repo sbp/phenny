@@ -37,13 +37,8 @@ def translate(text, input, output):
    pair = input + '%7C' + output
    bytes = web.get(uri + '?q=' + q + '&v=1.0&langpair=' + pair)
    result = json(bytes)
-   try: msg = result['responseData']['translatedText']
-   except Exception: 
-      msg = 'The %s to %s translation failed, sorry!' % (input, output)
-   else: 
-      msg = msg.encode('cp1252').replace('&#39;', "'")
-      msg = '"%s" (%s to %s, translate.google.com)' % (msg, input, output)
-   return msg
+   try: return result['responseData']['translatedText'].encode('cp1252')
+   except Exception: return None
 
 def tr(phenny, context): 
    """Translates a phrase, with an optional language hint."""
@@ -63,12 +58,37 @@ def tr(phenny, context):
 
    if input != output: 
       msg = translate(phrase, input, output)
+      if msg: 
+         msg = msg.replace('&#39;', "'")
+         msg = '"%s" (%s to %s, translate.google.com)' % (msg, input, output)
+      else: msg = 'The %s to %s translation failed, sorry!' % (input, output)
+
       phenny.reply(msg)
    else: phenny.reply('Ehwhatnow?')
 
 tr.rule = ('$nick', ur'(?:([a-z]{2}) +)?(?:([a-z]{2}) +)?["“](.+?)["”]\? *$')
 tr.example = '$nickname: "mon chien"? or $nickname: fr "mon chien"?'
 tr.priority = 'low'
+
+def mangle(phenny, input): 
+   phrase = input.group(2).encode('utf-8')
+   for lang in ['fr', 'de', 'es', 'it', 'ja']: 
+      backup = phrase
+      phrase = translate(phrase, 'en', lang)
+      if not phrase: 
+         phrase = backup
+         break
+      __import__('time').sleep(0.5)
+
+      backup = phrase
+      phrase = translate(phrase, lang, 'en')
+      if not phrase: 
+         phrase = backup
+         break
+      __import__('time').sleep(0.5)
+
+   phenny.reply(phrase or 'ERRORS SRY')
+mangle.commands = ['mangle']
 
 if __name__ == '__main__': 
    print __doc__.strip()

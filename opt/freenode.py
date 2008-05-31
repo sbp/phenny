@@ -9,7 +9,7 @@ http://inamidst.com/phenny/
 
 def replaced(phenny, input): 
    command = input.group(1)
-   response = {
+   responses = {
       'cp': '.cp has been replaced by .u', 
       'pc': '.pc has been replaced by .u', 
       'unicode': '.unicode has been replaced by .u', 
@@ -22,10 +22,11 @@ def replaced(phenny, input):
       'thesaurus': ".thesaurus hasn't been ported to my new codebase yet", 
       'rates': "moon wanter. moOOoon wanter!", 
       'web': 'the .web command has been removed; ask sbp for details', 
-      'mangle': ".mangle hasn't been ported to my new codebase yet", 
       'origin': ".origin hasn't been ported to my new codebase yet"
-   }[command]
-   phenny.reply(response)
+   }
+   try: response = responses[command]
+   except KeyError: return
+   else: phenny.reply(response)
 replaced.commands = [
    'cp', 'pc', 'unicode', 'compare', 'map', 'acronym', 'img', 
    'v', 'validate', 'thesaurus', 'rates', 'web', 'mangle', 'origin'

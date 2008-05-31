@@ -55,7 +55,7 @@ class Phenny(irc.Bot):
          name = os.path.basename(filename)[:-3]
          try: module = imp.load_source(name, filename)
          except Exception, e: 
-            print >> sys.stderr, "Error loading %s: %s" % (name, e)
+            print >> sys.stderr, "Error loading %s: %s (in bot.py)" % (name, e)
          else: 
             if hasattr(module, 'setup'): 
                module.setup(self)

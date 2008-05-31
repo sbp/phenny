@@ -36,7 +36,10 @@ def run_phenny(config):
       p = bot.Phenny(config)
       p.run(config.host, config.port)
 
-   Watcher()
+   try: Watcher()
+   except Exception, e: 
+      print >> sys.stderr, 'Warning:', e, '(in __init__.py)'
+
    while True: 
       try: connect(config)
       except KeyboardInterrupt: 
