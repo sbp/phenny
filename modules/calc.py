@@ -61,7 +61,7 @@ def calc(phenny, input):
       elif ' in ' in q: 
          result += ' ' + q.split(' in ', 1)[1]
 
-      phenny.say(q + ' = ' + result)
+      phenny.say(q + ' = ' + result[:350])
    else: phenny.reply("Sorry, can't calculate that.")
 calc.commands = ['calc']
 calc.example = '.calc 5 + 3'

@@ -12,10 +12,13 @@ def join(phenny, input):
    # Can only be done in privmsg by an admin
    if input.sender.startswith('#'): return
    if input.admin: 
-      phenny.write(['JOIN'], input.group(2))
-join.commands = ['join']
+      channel, key = input.group(1), input.group(2)
+      if not key: 
+         phenny.write(['JOIN'], channel)
+      else: phenny.write(['JOIN', channel, key])
+join.rule = r'\.join (#\S+)(?: *(\S+))?'
 join.priority = 'low'
-join.example = '.join #example'
+join.example = '.join #example or .join #example key'
 
 def part(phenny, input): 
    """Part the specified channel. This is an admin-only command."""

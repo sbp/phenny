@@ -24,7 +24,7 @@ r_redirect = re.compile(
 
 abbrs = ['etc', 'ca', 'cf', 'Co', 'Ltd', 'Inc', 'Mt', 'Mr', 'Mrs', 
          'Dr', 'Ms', 'Rev', 'Fr', 'St', 'Sgt', 'pron', 'approx', 'lit', 
-         'syn'] \
+         'syn', 'transl'] \
    + list('ABCDEFGHIJKLMNOPQRSTUVWXYZ') \
    + list('abcdefghijklmnopqrstuvwxyz')
 t_sentence = r'^.{5,}?(?<!\b%s)(?:\.(?= [A-Z0-9]|\Z)|\Z)'
@@ -97,8 +97,8 @@ def wikipedia(term, last=False):
                           and not '(images and media)' in para
                           and not 'This article contains a' in para 
                           and not 'id="coordinates"' in para
-                          and not 'class="thumb' in para 
-                          and not 'style="display:none"' in para]
+                          and not 'class="thumb' in para]
+                          # and not 'style="display:none"' in para]
 
    for i, para in enumerate(paragraphs): 
       para = para.replace('<sup>', '|')

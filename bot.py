@@ -152,11 +152,12 @@ class Phenny(irc.Bot):
             self.bot = phenny
 
          def __getattr__(self, attr): 
+            sender = origin.sender or text
             if attr == 'reply': 
                return (lambda msg: 
-                  self.bot.msg(origin.sender, origin.nick + ': ' + msg))
+                  self.bot.msg(sender, origin.nick + ': ' + msg))
             elif attr == 'say': 
-               return lambda msg: self.bot.msg(origin.sender, msg)
+               return lambda msg: self.bot.msg(sender, msg)
             return getattr(self.bot, attr)
 
       return PhennyWrapper(self)
