@@ -16,20 +16,23 @@ def replaced(phenny, input):
       'compare': '.compare has been replaced by .gcs (googlecounts)', 
       'map': 'the .map command has been removed; ask sbp for details', 
       'acronym': 'the .acronym command has been removed; ask sbp for details', 
-      'img': 'the .img command has been removed; ask sbp for details', 
+      # 'img': 'the .img command has been removed; ask sbp for details', 
       'v': '.v has been replaced by .val', 
       'validate': '.validate has been replaced by .validate', 
       'thesaurus': ".thesaurus hasn't been ported to my new codebase yet", 
-      'rates': "moon wanter. moOOoon wanter!", 
+      # 'rates': "moon wanter. moOOoon wanter!", 
       'web': 'the .web command has been removed; ask sbp for details', 
-      'origin': ".origin hasn't been ported to my new codebase yet"
+      'origin': ".origin hasn't been ported to my new codebase yet", 
+      # 'gs': 'sorry, .gs no longer works', 
+      'swhack': 'sorry, .swhack no longer works'
    }
    try: response = responses[command]
    except KeyError: return
    else: phenny.reply(response)
 replaced.commands = [
-   'cp', 'pc', 'unicode', 'compare', 'map', 'acronym', 'img', 
-   'v', 'validate', 'thesaurus', 'rates', 'web', 'mangle', 'origin'
+   'cp', 'pc', 'unicode', 'compare', 'map', 'acronym', 
+   'v', 'validate', 'thesaurus', 'web', 'mangle', 'origin', 
+   'swhack'
 ]
 replaced.priority = 'low'
 

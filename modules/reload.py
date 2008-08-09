@@ -14,6 +14,9 @@ def f_reload(phenny, input):
    if not input.admin: return
 
    name = input.group(2)
+   if name == phenny.config.owner: 
+      return phenny.reply('What?')
+
    if (not name) or (name == '*'): 
       phenny.setup()
       return phenny.reply('done')

@@ -135,8 +135,12 @@ def f_title(self, origin, match, args):
             return unichr(char).encode('utf-8')
       title = r_entity.sub(e, title)
 
-      if not title: 
-         title = '[Title is the empty document, "".]'
+      if title: 
+         try: title.decode('iso-8859-1')
+         except: pass
+         else: title = title.decode('iso-8859-1').encode('utf-8')
+      else: title = '[The title is empty.]'
+
       self.msg(origin.sender, origin.nick + ': ' + title)
    else: self.msg(origin.sender, origin.nick + ': No title found')
 f_title.commands = ['title']

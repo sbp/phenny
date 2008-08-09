@@ -39,7 +39,8 @@ def dumpReminders(fn, data):
    for tellee in data.iterkeys(): 
       for remindon in data[tellee]: 
          line = '\t'.join((tellee,) + remindon)
-         f.write(line + '\n')
+         try: f.write(line + '\n')
+         except IOError: break
    try: f.close()
    except IOError: pass
    return True
@@ -64,7 +65,7 @@ def f_remind(phenny, input):
    tellee = tellee.encode('utf-8')
    msg = msg.encode('utf-8')
 
-   tellee_original = tellee.rstrip(',:;')
+   tellee_original = tellee.rstrip('.,:;')
    tellee = tellee_original.lower()
 
    if not os.path.exists(phenny.tell_filename): 

@@ -94,7 +94,7 @@ def f_etymology(self, origin, match, args):
       msg = 'Can\'t find the etymology for "%s". Try %s' % (word, uri)
       self.msg(origin.sender, msg)
 # @@ Cf. http://swhack.com/logs/2006-01-04#T01-50-22
-f_etymology.rule = (['ety'], r"([A-Za-z0-9' -]+)")
+f_etymology.rule = (['ety'], r"([A-Za-z0-9' .-]+)")
 f_etymology.thread = True
 f_etymology.priority = 'high'
 

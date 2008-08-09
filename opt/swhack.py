@@ -28,7 +28,7 @@ def swhack(phenny, input):
       phenny.reply('Sorry, no results found.')
 
    u.close()
-swhack.commands = ['swhack']
+# swhack.commands = ['swhack']
 
 if __name__ == '__main__': 
    print __doc__.strip()
