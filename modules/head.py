@@ -7,7 +7,7 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import re, urllib, urlparse, time
+import re, urllib, httplib, urlparse, time
 from htmlentitydefs import name2codepoint
 import web
 from tools import deprecated
@@ -24,11 +24,17 @@ def head(phenny, input):
       try: uri = phenny.last_seen_uri[input.sender]
       except KeyError: return phenny.say('?')
 
+   if not uri.startswith('htt'): 
+      uri = 'http://' + uri
+
    try: info = web.head(uri)
    except IOError: return phenny.say("Can't connect to %s" % uri)
+   except httplib.InvalidURL: return phenny.say("Not a valid URI, sorry.")
 
    if not isinstance(info, list): 
-      info = dict(info)
+      try: info = dict(info)
+      except TypeError: 
+         return phenny.reply('Try .head http://example.org/ [optional header]')
       info['Status'] = '200'
    else: 
       newInfo = dict(info[0])

@@ -16,18 +16,24 @@ class Grab(urllib.URLopener):
 urllib._urlopener = Grab()
 
 def get(uri): 
+   if not uri.startswith('http'): 
+      return
    u = urllib.urlopen(uri)
    bytes = u.read()
    u.close()
    return bytes
 
 def head(uri): 
+   if not uri.startswith('http'): 
+      return
    u = urllib.urlopen(uri)
    info = u.info()
    u.close()
    return info
 
 def post(uri, query): 
+   if not uri.startswith('http'): 
+      return
    data = urllib.urlencode(query)
    u = urllib.urlopen(uri, data)
    bytes = u.read()

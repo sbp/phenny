@@ -70,6 +70,8 @@ def u(phenny, input):
    # phenny.msg('#inamidst', '%r' % arg)
    if not arg: 
       return phenny.reply('You gave me zero length input.')
+   elif not arg.strip(' '): 
+      return phenny.reply('%s SPACES' % len(arg))
 
    # @@ space
    if set(arg.upper()) - set(

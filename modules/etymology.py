@@ -22,7 +22,7 @@ abbrs = [
    'cf', 'lit', 'etc', 'Ger', 'Du', 'Skt', 'Rus', 'Eng', 'Amer.Eng', 'Sp', 
    'Fr', 'N', 'E', 'S', 'W', 'L', 'Gen', 'J.C', 'dial', 'Gk', 
    '19c', '18c', '17c', '16c', 'St', 'Capt', 'obs', 'Jan', 'Feb', 'Mar', 
-   'Apr', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+   'Apr', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'c'
 ]
 t_sentence = r'^.*?(?<!%s)(?:\.(?= [A-Z0-9]|\Z)|\Z)'
 r_sentence = re.compile(t_sentence % ')(?<!'.join(abbrs))

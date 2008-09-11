@@ -66,6 +66,7 @@ g.example = '.g swhack'
 
 def gc(phenny, input): 
    """Returns the number of Google results for the specified input."""
+   if input.nick == 'goatov': return
    query = input.group(2)
    if not query: 
       return phenny.reply('.gc what?')
