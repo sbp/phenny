@@ -96,8 +96,8 @@ TZ1 = {
 }
 
 TZ2 = {
- 'ACDT': -10.5, 
- 'ACST': -9.5, 
+ 'ACDT': 10.5, 
+ 'ACST': 9.5, 
  'ADT': 3, 
  'AEDT': 11, # hmm
  'AEST': 10, # hmm
@@ -251,7 +251,7 @@ def yi(phenny, input):
    raels = quadraels * 4
    extraraels, remainder = divide(remainder, 432000)
    if extraraels == 4: 
-      return phenny.say('Yes!')
+      return phenny.say('Yes! PARTAI!')
    else: phenny.say('Not yet...')
 yi.commands = ['yi']
 yi.priority = 'low'

@@ -52,10 +52,14 @@ class Bot(asynchat.async_chat):
 
    def write(self, args, text=None): 
       # This is a safe version of __write
+      def safe(input): 
+         input = input.replace('\n', '')
+         input = input.replace('\r', '')
+         return input.encode('utf-8')
       try: 
-         args = [arg.encode('utf-8') for arg in args]
+         args = [safe(arg) for arg in args]
          if text is not None: 
-            text = text.encode('utf-8')
+            text = safe(text)
          self.__write(args, text)
       except Exception, e: pass
 

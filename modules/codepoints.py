@@ -71,7 +71,8 @@ def u(phenny, input):
    if not arg: 
       return phenny.reply('You gave me zero length input.')
    elif not arg.strip(' '): 
-      return phenny.reply('%s SPACES' % len(arg))
+      if len(arg) > 1: return phenny.reply('%s SPACEs (U+0020)' % len(arg))
+      return phenny.reply('1 SPACE (U+0020)')
 
    # @@ space
    if set(arg.upper()) - set(

@@ -7,7 +7,7 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import re, urllib, httplib, urlparse, time
+import re, urllib, urllib2, httplib, urlparse, time
 from htmlentitydefs import name2codepoint
 import web
 from tools import deprecated
@@ -84,7 +84,11 @@ def f_title(self, origin, match, args):
    try: 
       redirects = 0
       while True: 
-         info = web.head(uri)
+         req = urllib2.Request(uri, headers={'Accept':'text/html'})
+         u = urllib2.urlopen(req)
+         info = u.info()
+         u.close()
+         # info = web.head(uri)
 
          if not isinstance(info, list): 
             status = '200'
@@ -108,7 +112,7 @@ def f_title(self, origin, match, args):
          self.msg(origin.sender, origin.nick + ": Document isn't HTML")
          return
 
-      u = urllib.urlopen(uri)
+      u = urllib2.urlopen(req)
       bytes = u.read(32768)
       u.close()
 
@@ -142,11 +146,15 @@ def f_title(self, origin, match, args):
       title = r_entity.sub(e, title)
 
       if title: 
-         try: title.decode('iso-8859-1')
-         except: pass
-         else: title = title.decode('iso-8859-1').encode('utf-8')
+         try: title.decode('utf-8')
+         except: 
+            try: title = title.decode('iso-8859-1').encode('utf-8')
+            except: title = title.decode('cp1252').encode('utf-8')
+         else: pass
       else: title = '[The title is empty.]'
 
+      title = title.replace('\n', '')
+      title = title.replace('\r', '')
       self.msg(origin.sender, origin.nick + ': ' + title)
    else: self.msg(origin.sender, origin.nick + ': No title found')
 f_title.commands = ['title']

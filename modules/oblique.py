@@ -7,18 +7,22 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import urllib
+import re, urllib
 import web
+
+definitions = 'http://code.google.com/p/phenny-ws/wiki/ServiceDefinitions'
+
+r_item = re.compile(r'(?i)<li>(.*?)</li>')
+r_tag = re.compile(r'<[^>]+>')
 
 def mappings(uri): 
    result = {}
    bytes = web.get(uri)
-   for line in bytes.splitlines(): 
-      if not line.startswith('<li>'): continue
-      line = line.strip()
-      if not line.endswith('</li>'): continue
+   for item in r_item.findall(bytes): 
+      item = r_tag.sub('', item).strip(' \t\r\n')
+      if not ' ' in item: continue
 
-      command, template = line[4:-5].split(' ', 1)
+      command, template = item.split(' ', 1)
       if not template.startswith('http://'): continue
       result[command] = template
    return result
@@ -26,32 +30,39 @@ def mappings(uri):
 def o(phenny, input): 
    """Call a webservice."""
    text = input.group(2)
+   if hasattr(phenny.config, 'services'): 
+      services = phenny.config.services
+   else: services = definitions
 
    if (not o.services) or (text == 'refresh'): 
-      if hasattr(phenny.config, 'services'): 
-         services = phenny.config.services
-      else: services = 'http://swhack.jottit.com/services'
-
+      old = o.services
       o.services = mappings(services)
       if text == 'refresh': 
-         return phenny.reply('Okay, found %s services.' % len(o.services))
+         msg = 'Okay, found %s services.' % len(o.services)
+         added = set(o.services) - set(old)
+         if added: 
+            msg += ' Added: ' + ', '.join(sorted(added)[:5])
+            if len(added) > 5: msg += ', &c.'
+         return phenny.reply(msg)
+
+   if not text: 
+      return phenny.reply('Try %s for details.' % services)
 
    if ' ' in text: 
       command, args = text.split(' ', 1)
    else: command, args = text, ''
    command = command.lower()
-   args = urllib.quote(args)
 
    if o.services.has_key(command): 
       template = o.services[command]
-      template = template.replace('${args}', args)
-      template = template.replace('${nick}', input.nick)
-      uri = template.replace('${sender}', input.sender)
+      template = template.replace('${args}', urllib.quote(args.encode('utf-8')))
+      template = template.replace('${nick}', urllib.quote(input.nick))
+      uri = template.replace('${sender}', urllib.quote(input.sender))
 
       bytes = web.get(uri)
       lines = bytes.splitlines()
       if lines: 
-         phenny.say(lines[0])
+         phenny.say(lines[0][:350])
       else: phenny.reply('Sorry, the service is broken.')
    else: phenny.reply('Sorry, no such service. See %s' % services)
 o.commands = ['o']
