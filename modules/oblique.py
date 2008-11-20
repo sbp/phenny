@@ -24,7 +24,7 @@ def mappings(uri):
 
       command, template = item.split(' ', 1)
       if not template.startswith('http://'): continue
-      result[command] = template
+      result[command] = template.replace('&amp;', '&')
    return result
 
 def o(phenny, input): 

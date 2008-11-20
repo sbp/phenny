@@ -22,24 +22,24 @@ def json(text):
    print text
    raise ValueError('Input must be serialised JSON.')
 
-def search(query, n=1): 
-   """Search using SearchMash, return its JSON."""
-   q = web.urllib.quote(query.encode('utf-8'))
-   uri = 'http://www.searchmash.com/results/' + q + '?n=' + str(n)
-   bytes = web.get(uri)
+def search(query): 
+   """Search using AjaxSearch, and return its JSON."""
+   uri = 'http://ajax.googleapis.com/ajax/services/search/web'
+   args = '?v=1.0&safe=off&q=' + web.urllib.quote(query.encode('utf-8'))
+   bytes = web.get(uri + args)
    return json(bytes)
 
 def result(query): 
    results = search(query)
-   if results['results']: 
-      return results['results'][0]['url']
+   if results['responseData']: 
+      return results['responseData']['results'][0]['unescapedUrl']
    return None
 
 def count(query): 
    results = search(query)
-   if not results['results']: 
+   if not results['responseData'] or not results['responseData']['cursor']: 
       return '0'
-   return results['estimatedCount']
+   return results['responseData']['cursor']['estimatedResultCount']
 
 def formatnumber(n): 
    """Format a number with beautiful commas."""
@@ -66,11 +66,10 @@ g.example = '.g swhack'
 
 def gc(phenny, input): 
    """Returns the number of Google results for the specified input."""
-   if input.nick == 'goatov': return
    query = input.group(2)
    if not query: 
       return phenny.reply('.gc what?')
-   num = count(query)
+   num = formatnumber(count(query))
    phenny.say(query + ': ' + num)
 gc.commands = ['gc']
 gc.priority = 'high'
@@ -88,7 +87,7 @@ def gcs(phenny, input):
    results = []
    for i, query in enumerate(queries): 
       query = query.strip('[]')
-      n = int((count(query) or '0').replace(',', ''))
+      n = int((formatnumber(count(query)) or '0').replace(',', ''))
       results.append((n, query))
       if i >= 2: __import__('time').sleep(0.25)
       if i >= 4: __import__('time').sleep(0.25)
