@@ -37,7 +37,9 @@ def result(query):
 
 def count(query): 
    results = search(query)
-   if not results['responseData'] or not results['responseData']['cursor']: 
+   if not results.has_key('responseData'): return '0'
+   if not results['responseData'].has_key('cursor'): return '0'
+   if not results['responseData']['cursor'].has_key('estimatedResultCount'): 
       return '0'
    return results['responseData']['cursor']['estimatedResultCount']
 
