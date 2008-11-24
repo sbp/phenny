@@ -31,9 +31,8 @@ def search(query):
 
 def result(query): 
    results = search(query)
-   if results['responseData']: 
-      return results['responseData']['results'][0]['unescapedUrl']
-   return None
+   try: return results['responseData']['results'][0]['unescapedUrl']
+   except IndexError: return None
 
 def count(query): 
    results = search(query)

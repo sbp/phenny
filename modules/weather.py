@@ -64,18 +64,21 @@ def local(icao, hour, minute):
    return str(hour) + ':' + str(minute) + 'Z'
 
 def code(phenny, search): 
-   name, country, latitude, longitude = location(search)
-   if name == '?': return False
-
-   sumOfSquares = (99999999999999999999999999999, 'ICAO')
    from icao import data
-   for icao_code, lat, lon in data: 
-      latDiff = abs(latitude - lat)
-      lonDiff = abs(longitude - lon)
-      diff = (latDiff * latDiff) + (lonDiff * lonDiff)
-      if diff < sumOfSquares[0]: 
-         sumOfSquares = (diff, icao_code)
-   return sumOfSquares[1]
+   
+   if search.upper() in [loc[0] for loc in data]:
+      return search.upper()
+   else:
+      name, country, latitude, longitude = location(search)
+      if name == '?': return False
+      sumOfSquares = (99999999999999999999999999999, 'ICAO')
+      for icao_code, lat, lon in data: 
+         latDiff = abs(latitude - lat)
+         lonDiff = abs(longitude - lon)
+         diff = (latDiff * latDiff) + (lonDiff * lonDiff)
+         if diff < sumOfSquares[0]: 
+            sumOfSquares = (diff, icao_code)
+      return sumOfSquares[1]
 
 @deprecated
 def f_weather(self, origin, match, args): 
@@ -87,11 +90,7 @@ def f_weather(self, origin, match, args):
    if not icao_code: 
       return self.msg(origin.sender, 'Try .weather London, for example?')
 
-   if (not len(icao_code) == 4) or \
-      (len(icao_code) > 1 and icao_code[0] in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' and 
-                         icao_code[1] in 'abcdefghijklmnopqrstuvwxyz'): 
-      icao_code = code(self, icao_code)
-   else: icao_code = icao_code.upper()
+   icao_code = code(self, icao_code)
 
    if not icao_code: 
       self.msg(origin.sender, 'No ICAO code found, sorry')
