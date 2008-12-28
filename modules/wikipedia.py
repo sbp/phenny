@@ -24,7 +24,7 @@ r_redirect = re.compile(
 
 abbrs = ['etc', 'ca', 'cf', 'Co', 'Ltd', 'Inc', 'Mt', 'Mr', 'Mrs', 
          'Dr', 'Ms', 'Rev', 'Fr', 'St', 'Sgt', 'pron', 'approx', 'lit', 
-         'syn', 'transl', 'sess', 'fl'] \
+         'syn', 'transl', 'sess', 'fl', 'Op'] \
    + list('ABCDEFGHIJKLMNOPQRSTUVWXYZ') \
    + list('abcdefghijklmnopqrstuvwxyz')
 t_sentence = r'^.{5,}?(?<!\b%s)(?:\.(?= [A-Z0-9]|\Z)|\Z)'

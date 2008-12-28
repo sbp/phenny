@@ -53,9 +53,13 @@ def o(phenny, input):
    else: command, args = text, ''
    command = command.lower()
 
+   if command == 'service': 
+      msg = o.services.get(args, 'No such service!')
+      return phenny.reply(msg)
+
    if o.services.has_key(command): 
-      template = o.services[command]
-      template = template.replace('${args}', urllib.quote(args.encode('utf-8')))
+      t = o.services[command]
+      template = t.replace('${args}', urllib.quote(args.encode('utf-8')))
       template = template.replace('${nick}', urllib.quote(input.nick))
       uri = template.replace('${sender}', urllib.quote(input.sender))
 

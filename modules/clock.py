@@ -135,7 +135,7 @@ TZ2 = {
  'HST': 10, 
  'IDLE': -12, 
  'IDLW': 12, 
- 'IST': -5.5, 
+ # 'IST': -5.5, 
  'IT': -3.5, 
  'JST': -9, 
  'JT': -7, 
@@ -181,8 +181,14 @@ TZ2 = {
  'ZP6': -6
 }
 
-TimeZones.update(TZ2)
+TZ3 = {
+   'AEST': 10, 
+   'AEDT': 11
+}
+
+# TimeZones.update(TZ2) # do these have to be negated?
 TimeZones.update(TZ1)
+TimeZones.update(TZ3)
 
 @deprecated
 def f_time(self, origin, match, args): 
