@@ -27,7 +27,7 @@ abbrs = ['etc', 'ca', 'cf', 'Co', 'Ltd', 'Inc', 'Mt', 'Mr', 'Mrs',
          'syn', 'transl', 'sess', 'fl', 'Op'] \
    + list('ABCDEFGHIJKLMNOPQRSTUVWXYZ') \
    + list('abcdefghijklmnopqrstuvwxyz')
-t_sentence = r'^.{5,}?(?<!\b%s)(?:\.(?= [A-Z0-9]|\Z)|\Z)'
+t_sentence = r'^.{5,}?(?<!\b%s)(?:\.(?=[\[ ][A-Z0-9]|\Z)|\Z)'
 r_sentence = re.compile(t_sentence % r')(?<!\b'.join(abbrs))
 
 def unescape(s): 

@@ -43,9 +43,11 @@ quit.priority = 'low'
 def msg(phenny, input): 
    # Can only be done in privmsg by an admin
    if input.sender.startswith('#'): return
+   a, b = input.group(2), input.group(3)
+   if (not a) or (not b): return
    if input.admin: 
-      phenny.msg(input.group(2), input.group(3))
-msg.rule = (['msg'], r'(#?\S+) (.*)')
+      phenny.msg(a, b)
+msg.rule = (['msg'], r'(#?\S+) (.+)')
 msg.priority = 'low'
 
 def me(phenny, input): 

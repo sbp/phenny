@@ -19,7 +19,6 @@ def json(text):
    if r_json.match(r_string.sub('', text)): 
       text = r_string.sub(lambda m: 'u' + m.group(1), text)
       return eval(text.strip(' \t\r\n'), env, {})
-   print text
    raise ValueError('Input must be serialised JSON.')
 
 def search(query): 
