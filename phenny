@@ -43,8 +43,15 @@ def create_default_config(fn):
    # 
    # enable = []
 
-   # Modules to load from the opt directory
+   # Directories to load opt modules from
    extra = []
+
+   # Services to load: maps channel names to white or black lists
+   external = { 
+      '#liberal': ['!'], # allow all
+      '#conservative': [], # allow none
+      '*': ['py', 'whois', 'glyph'] # default whitelist
+   }
 
    # EOF
    """)
@@ -98,18 +105,18 @@ def config_names(config):
    sys.exit(1)
 
 def main(argv=None): 
-   # Step One: Check Dependencies
-
-   check_python_version() # require python2.4 or later
-   check_dotdir() # require ~/.phenny, or make it and exit
-
-   # Step Two: Parse The Command Line
+   # Step One: Parse The Command Line
 
    parser = optparse.OptionParser('%prog [options]')
    parser.add_option('-c', '--config', metavar='fn', 
       help='use this configuration file or directory')
    opts, args = parser.parse_args(argv)
    if args: print >> sys.stderr, 'Warning: ignoring spurious arguments'
+
+   # Step Two: Check Dependencies
+
+   check_python_version() # require python2.4 or later
+   check_dotdir() # require ~/.phenny, or make it and exit
 
    # Step Three: Load The Configurations
 

@@ -19,12 +19,10 @@ def replaced(phenny, input):
       # 'img': 'the .img command has been removed; ask sbp for details', 
       'v': '.v has been replaced by .val', 
       'validate': '.validate has been replaced by .validate', 
-      'thesaurus': ".thesaurus hasn't been ported to my new codebase yet", 
       # 'rates': "moon wanter. moOOoon wanter!", 
       'web': 'the .web command has been removed; ask sbp for details', 
-      'origin': ".origin hasn't been ported to my new codebase yet", 
-      # 'gs': 'sorry, .gs no longer works', 
-      'swhack': 'sorry, .swhack no longer works'
+      'origin': ".origin hasn't been ported to my new codebase yet"
+      # 'gs': 'sorry, .gs no longer works'
    }
    try: response = responses[command]
    except KeyError: return

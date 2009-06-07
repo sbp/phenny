@@ -22,7 +22,7 @@ abbrs = [
    'cf', 'lit', 'etc', 'Ger', 'Du', 'Skt', 'Rus', 'Eng', 'Amer.Eng', 'Sp', 
    'Fr', 'N', 'E', 'S', 'W', 'L', 'Gen', 'J.C', 'dial', 'Gk', 
    '19c', '18c', '17c', '16c', 'St', 'Capt', 'obs', 'Jan', 'Feb', 'Mar', 
-   'Apr', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'c', 'tr'
+   'Apr', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'c', 'tr', 'e', 'g'
 ]
 t_sentence = r'^.*?(?<!%s)(?:\.(?= [A-Z0-9]|\Z)|\Z)'
 r_sentence = re.compile(t_sentence % ')(?<!'.join(abbrs))
@@ -82,19 +82,17 @@ def f_etymology(self, origin, match, args):
       msg = "Can't connect to etymonline.com (%s)" % (etyuri % word)
       self.msg(origin.sender, msg)
       return
+   except AttributeError: 
+      result = None
 
    if result is not None: 
-      if (origin.sender == '#esp') and (origin.nick == 'nsh'): 
-         self.msg(origin.nick, result)
-         note = 'nsh: see privmsg (yes, this only happens for you)'
-         self.msg(origin.sender, note)
-      else: self.msg(origin.sender, result)
+      self.msg(origin.sender, result)
    else: 
       uri = etysearch % word
       msg = 'Can\'t find the etymology for "%s". Try %s' % (word, uri)
       self.msg(origin.sender, msg)
 # @@ Cf. http://swhack.com/logs/2006-01-04#T01-50-22
-f_etymology.rule = (['ety'], r"([A-Za-z0-9' .-]+)")
+f_etymology.rule = (['ety'], r"([A-Za-z0-9' .-]+)$")
 f_etymology.thread = True
 f_etymology.priority = 'high'
 

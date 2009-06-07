@@ -23,6 +23,7 @@ def mappings(uri):
       if not ' ' in item: continue
 
       command, template = item.split(' ', 1)
+      if not command.isalpha(): continue
       if not template.startswith('http://'): continue
       result[command] = template.replace('&amp;', '&')
    return result
@@ -57,6 +58,19 @@ def o(phenny, input):
       msg = o.services.get(args, 'No such service!')
       return phenny.reply(msg)
 
+   if not o.services.has_key(command): 
+      return phenny.reply('Sorry, no such service. See %s' % services)
+
+   if hasattr(phenny.config, 'external'): 
+      default = phenny.config.external.get('*')
+      manifest = phenny.config.external.get(input.sender, default)
+      if manifest: 
+         commands = set(manifest)
+         if (command not in commands) and (manifest[0] != '!'): 
+            return phenny.reply('Sorry, %s is not whitelisted' % command)
+         elif (command in commands) and (manifest[0] == '!'): 
+            return phenny.reply('Sorry, %s is blacklisted' % command)
+
    if o.services.has_key(command): 
       t = o.services[command]
       template = t.replace('${args}', urllib.quote(args.encode('utf-8')))
@@ -68,10 +82,24 @@ def o(phenny, input):
       if lines: 
          phenny.say(lines[0][:350])
       else: phenny.reply('Sorry, the service is broken.')
-   else: phenny.reply('Sorry, no such service. See %s' % services)
 o.commands = ['o']
 o.example = '.o servicename arg1 arg2 arg3'
 o.services = {}
+
+def py(phenny, input): 
+   command = 'py'
+   args = input.group(2)
+   if o.services.has_key(command): 
+      t = o.services[command]
+      template = t.replace('${args}', urllib.quote(args.encode('utf-8')))
+      template = template.replace('${nick}', urllib.quote(input.nick))
+      uri = template.replace('${sender}', urllib.quote(input.sender))
+
+      bytes = web.get(uri)
+      lines = bytes.splitlines()
+      if lines: 
+         phenny.say(lines[0][:350])
+py.commands = ['py']
 
 if __name__ == '__main__': 
    print __doc__.strip()
