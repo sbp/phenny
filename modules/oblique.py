@@ -23,7 +23,7 @@ def mappings(uri):
       if not ' ' in item: continue
 
       command, template = item.split(' ', 1)
-      if not command.isalpha(): continue
+      if not command.isalnum(): continue
       if not template.startswith('http://'): continue
       result[command] = template.replace('&amp;', '&')
    return result

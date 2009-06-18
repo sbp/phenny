@@ -25,6 +25,8 @@ def f_reload(phenny, input):
    except ImportError: 
       module = getattr(__import__('opt.' + name), name)
    reload(module)
+   if hasattr(module, 'setup'): 
+      module.setup(phenny)
 
    if hasattr(module, '__file__'): 
       import os.path, time

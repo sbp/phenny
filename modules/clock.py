@@ -7,7 +7,7 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import math, time, urllib
+import re, math, time, urllib, locale
 from tools import deprecated
 
 TimeZones = {'KST': 9, 'CADT': 10.5, 'EETDST': 3, 'MESZ': 2, 'WADT': 9, 
@@ -190,6 +190,8 @@ TZ3 = {
 TimeZones.update(TZ1)
 TimeZones.update(TZ3)
 
+r_local = re.compile(r'\([a-z]+_[A-Z]+\)')
+
 @deprecated
 def f_time(self, origin, match, args): 
    """Returns the current time."""
@@ -210,6 +212,10 @@ def f_time(self, origin, match, args):
 
    if (TZ == 'UTC') or (TZ == 'Z'): 
       msg = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+      self.msg(origin.sender, msg)
+   elif r_local.match(tz): # thanks to Mark Shoulsdon (clsn)
+      locale.setlocale(locale.LC_TIME, (tz[1:-1], 'UTF-8'))
+      msg = time.strftime("%A, %d %B %Y %H:%M:%SZ", time.gmtime())
       self.msg(origin.sender, msg)
    elif TimeZones.has_key(TZ): 
       offset = TimeZones[TZ] * 3600
