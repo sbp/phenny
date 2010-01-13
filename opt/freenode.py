@@ -14,7 +14,7 @@ def replaced(phenny, input):
       'pc': '.pc has been replaced by .u', 
       'unicode': '.unicode has been replaced by .u', 
       'compare': '.compare has been replaced by .gcs (googlecounts)', 
-      'map': 'the .map command has been removed; ask sbp for details', 
+      # 'map': 'the .map command has been removed; ask sbp for details', 
       'acronym': 'the .acronym command has been removed; ask sbp for details', 
       # 'img': 'the .img command has been removed; ask sbp for details', 
       'v': '.v has been replaced by .val', 

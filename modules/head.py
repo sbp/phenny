@@ -113,7 +113,7 @@ def f_title(self, origin, match, args):
          return
 
       u = urllib2.urlopen(req)
-      bytes = u.read(32768)
+      bytes = u.read(262144)
       u.close()
 
    except IOError: 

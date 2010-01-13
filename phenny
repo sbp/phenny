@@ -30,8 +30,7 @@ def create_default_config(fn):
    channels = ['#example', '#test']
    owner = 'yournickname'
 
-   # This isn't implemented yet:
-   # serverpass = 'yourserverpassword'
+   # password = 'yourserverpassword'
 
    # These are people who will be able to use admin.py's functions...
    admins = [owner, 'someoneyoutrust']
@@ -43,7 +42,8 @@ def create_default_config(fn):
    # 
    # enable = []
 
-   # Directories to load opt modules from
+   # Directories to load user modules from
+   # e.g. /path/to/my/modules
    extra = []
 
    # Services to load: maps channel names to white or black lists
@@ -134,6 +134,9 @@ def main(argv=None):
 
       if not hasattr(module, 'port'): 
          module.port = 6667
+
+      if not hasattr(module, 'password'): 
+         module.password = None
 
       if module.host == 'irc.example.net': 
          error = ('Error: you must edit the config file first!\n' + 
