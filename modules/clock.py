@@ -186,6 +186,12 @@ TZ3 = {
    'AEDT': 11
 }
 
+People = {
+   'd8uv': 'America/Anchorage', 
+   'sbp': 'Europe/London', # Actually UK...
+   'nslater': 'Europe/London' # Actually I DON'T KNOW WHAT THE FUCK
+}
+
 # TimeZones.update(TZ2) # do these have to be negated?
 TimeZones.update(TZ1)
 TimeZones.update(TZ3)
@@ -267,8 +273,6 @@ def yi(phenny, input):
    else: phenny.say('Not yet...')
 yi.commands = ['yi']
 yi.priority = 'low'
-
-# d8uv d8uv d8uv d8uv d8uv d8uv d8uv
 
 def tock(phenny, input): 
    """Shows the time from the USNO's atomic clock."""
