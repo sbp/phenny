@@ -7,6 +7,7 @@ archive: ;
 	git archive --format=tar --prefix=phenny/ HEAD | bzip2 > phenny.tar.bz2
 
 ci: ;
+	hg ci
 	git commit -a && git push origin master
 
 log: ;

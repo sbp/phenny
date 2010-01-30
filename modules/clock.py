@@ -186,12 +186,6 @@ TZ3 = {
    'AEDT': 11
 }
 
-People = {
-   'd8uv': 'America/Anchorage', 
-   'sbp': 'Europe/London', # Actually UK...
-   'nslater': 'Europe/London' # Actually I DON'T KNOW WHAT THE FUCK
-}
-
 # TimeZones.update(TZ2) # do these have to be negated?
 TimeZones.update(TZ1)
 TimeZones.update(TZ3)
