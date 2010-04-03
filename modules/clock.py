@@ -7,7 +7,8 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import re, math, time, urllib, locale
+import re, math, time, urllib, locale, socket, struct, datetime
+from decimal import Decimal as dec
 from tools import deprecated
 
 TimeZones = {'KST': 9, 'CADT': 10.5, 'EETDST': 3, 'MESZ': 2, 'WADT': 9, 
@@ -276,6 +277,25 @@ def tock(phenny, input):
    phenny.say('"' + info['Date'] + '" - tycho.usno.navy.mil')
 tock.commands = ['tock']
 tock.priority = 'high'
+
+def npl(phenny, input): 
+   """Shows the time from NPL's SNTP server."""
+   client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+   client.sendto('\x1b' + 47 * '\0', ('ntp1.npl.co.uk', 123))
+   data, address = client.recvfrom(1024)
+   if data: 
+      buf = struct.unpack('B' * 48, data)
+      d = dec('0.0')
+      for i in range(8):
+         d += dec(buf[32 + i]) * dec(str(math.pow(2, (3 - i) * 8)))
+      d -= dec(2208988800L)
+      a, b = str(d).split('.')
+      f = '%Y-%m-%d %H:%M:%S'
+      result = datetime.datetime.fromtimestamp(d).strftime(f) + '.' + b[:6]
+      phenny.say(result + ' - ntp1.npl.co.uk')
+   else: phenny.say('No data received, sorry')
+npl.commands = ['npl']
+npl.priority = 'high'
 
 if __name__ == '__main__': 
    print __doc__.strip()

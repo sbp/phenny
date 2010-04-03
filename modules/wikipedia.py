@@ -126,8 +126,8 @@ def wikipedia(term, last=False):
       words.pop()
       sentence = ' '.join(words) + ' [...]'
 
-   if ((sentence == 'Wikipedia does not have an article with this exact name.')
-    or (sentence == 'Wikipedia does not have a page with this exact name.')): 
+   if (('using the Article Wizard if you wish' in sentence)
+    or ('or add a request for it' in sentence)): 
       if not last: 
          term = search(term)
          return wikipedia(term, last=True)

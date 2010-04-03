@@ -10,7 +10,8 @@ http://inamidst.com/phenny/
 import re, urllib
 import web
 
-definitions = 'http://code.google.com/p/phenny-ws/wiki/ServiceDefinitions'
+# definitions = 'http://code.google.com/p/phenny-ws/wiki/ServiceDefinitions'
+definitions = 'http://wiki.github.com/nslater/phenny-ws/'
 
 r_item = re.compile(r'(?i)<li>(.*?)</li>')
 r_tag = re.compile(r'<[^>]+>')

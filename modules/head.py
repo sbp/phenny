@@ -84,7 +84,11 @@ def f_title(self, origin, match, args):
    try: 
       redirects = 0
       while True: 
-         req = urllib2.Request(uri, headers={'Accept':'text/html'})
+         headers = {
+            'Accept': 'text/html', 
+            'User-Agent': 'Mozilla/5.0 (Phenny)'
+         }
+         req = urllib2.Request(uri, headers=headers)
          u = urllib2.urlopen(req)
          info = u.info()
          u.close()
