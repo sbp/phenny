@@ -15,4 +15,4 @@ log: ;
 	git graph
 
 sync: ;
-	rsync -avz --delete ./ pubble:opt/phenny/
+	rsync -avz ./ pubble:opt/phenny/
