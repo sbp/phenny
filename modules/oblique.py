@@ -87,10 +87,6 @@ o.commands = ['o']
 o.example = '.o servicename arg1 arg2 arg3'
 o.services = {}
 
-def py(phenny, input): 
-   service(phenny, input, 'py', input.group(2))
-py.commands = ['py']
-
 def snippet(phenny, input): 
    py = "BeautifulSoup.BeautifulSoup(re.sub('<.*?>|(?<= ) +', '', " + \
         "eval(urllib.urlopen('http://ajax.googleapis.com/ajax/serv" + \
