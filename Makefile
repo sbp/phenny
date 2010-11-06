@@ -13,3 +13,6 @@ ci: ;
 log: ;
 	# git log --date=short --format='%h %ad %s'
 	git graph
+
+sync: ;
+	rsync -avz --delete ./ pubble:opt/phenny/
