@@ -13,18 +13,6 @@ from tools import deprecated
 
 r_from = re.compile(r'(?i)([+-]\d+):00 from')
 
-r_json = re.compile(r'^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]+$')
-r_string = re.compile(r'("(\\.|[^"\\])*")')
-env = {'__builtins__': None, 'null': None, 
-       'true': True, 'false': False}
-
-def json(text): 
-   """Evaluate JSON text safely (we hope)."""
-   if r_json.match(r_string.sub('', text)): 
-      text = r_string.sub(lambda m: 'u' + m.group(1), text)
-      return eval(text.strip(' \t\r\n'), env, {})
-   raise ValueError('Input must be serialised JSON.')
-
 def location(name): 
    name = urllib.quote(name.encode('utf-8'))
    uri = 'http://ws.geonames.org/searchJSON?q=%s&maxRows=1' % name
@@ -34,7 +22,7 @@ def location(name):
    bytes = u.read()
    u.close()
 
-   results = json(bytes)
+   results = web.json(bytes)
    try: name = results['geonames'][0]['name']
    except IndexError: 
       return '?', '?', '0', '0'

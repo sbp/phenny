@@ -10,23 +10,12 @@ http://inamidst.com/phenny/
 import re
 import web
 
-r_string = re.compile(r'("(\\.|[^"\\])*")')
-r_json = re.compile(r'^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]+$')
-env = {'__builtins__': None, 'null': None, 'true': True, 'false': False}
-
-def json(text): 
-   """Evaluate JSON text safely (we hope)."""
-   if r_json.match(r_string.sub('', text)): 
-      text = r_string.sub(lambda m: 'u' + m.group(1), text)
-      return eval(text.strip(' \t\r\n'), env, {})
-   raise ValueError('Input must be serialised JSON.')
-
 def search(query): 
    """Search using AjaxSearch, and return its JSON."""
    uri = 'http://ajax.googleapis.com/ajax/services/search/web'
    args = '?v=1.0&safe=off&q=' + web.urllib.quote(query.encode('utf-8'))
    bytes = web.get(uri + args)
-   return json(bytes)
+   return web.json(bytes)
 
 def result(query): 
    results = search(query)

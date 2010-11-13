@@ -11,23 +11,11 @@ http://inamidst.com/phenny/
 import re, urllib
 import web
 
-r_json = re.compile(r'^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]+$')
-r_string = re.compile(r'("(\\.|[^"\\])*")')
-env = {'__builtins__': None, 'null': None, 
-       'true': True, 'false': False}
-
-def json(text): 
-   """Evaluate JSON text safely (we hope)."""
-   if r_json.match(r_string.sub('', text)): 
-      text = r_string.sub(lambda m: 'u' + m.group(1), text)
-      return eval(text.strip(' \t\r\n'), env, {})
-   raise ValueError('Input must be serialised JSON.')
-
 def detect(text): 
    uri = 'http://ajax.googleapis.com/ajax/services/language/detect'
    q = urllib.quote(text)
    bytes = web.get(uri + '?q=' + q + '&v=1.0')
-   result = json(bytes)
+   result = web.json(bytes)
    try: return result['responseData']['language']
    except Exception: return None
 
@@ -36,7 +24,7 @@ def translate(text, input, output):
    q = urllib.quote(text)
    pair = input + '%7C' + output
    bytes = web.get(uri + '?q=' + q + '&v=1.0&langpair=' + pair)
-   result = json(bytes)
+   result = web.json(bytes)
    try: return result['responseData']['translatedText'].encode('cp1252')
    except Exception: return None
 
@@ -59,7 +47,7 @@ def tr(phenny, context):
    if input != output: 
       msg = translate(phrase, input, output)
       if msg: 
-         msg = msg.replace('&#39;', "'")
+         msg = web.decode(msg) # msg.replace('&#39;', "'")
          msg = '"%s" (%s to %s, translate.google.com)' % (msg, input, output)
       else: msg = 'The %s to %s translation failed, sorry!' % (input, output)
 
