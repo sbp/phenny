@@ -168,7 +168,7 @@ def noteuri(phenny, input):
    if not hasattr(phenny.bot, 'last_seen_uri'): 
       phenny.bot.last_seen_uri = {}
    phenny.bot.last_seen_uri[input.sender] = uri
-noteuri.rule = r'.*(http://[^<> "\x01]+)[,.]?'
+noteuri.rule = r'.*(http[s]?://[^<> "\x01]+)[,.]?'
 noteuri.priority = 'low'
 
 if __name__ == '__main__': 
