@@ -34,10 +34,15 @@ def service(phenny, input, command, args):
    template = template.replace('${nick}', urllib.quote(input.nick))
    uri = template.replace('${sender}', urllib.quote(input.sender))
 
+   info = web.head(uri)
+   if isinstance(info, list): 
+      info = info[0]
+   if not 'text/plain' in info.get('content-type', '').lower(): 
+      return phenny.reply("Sorry, the service didn't respond in plain text.")
    bytes = web.get(uri)
    lines = bytes.splitlines()
    if not lines: 
-      return phenny.reply('Sorry, the service is broken.')
+      return phenny.reply("Sorry, the service didn't respond any output.")
    phenny.say(lines[0][:350])
 
 def refresh(phenny): 

@@ -29,7 +29,8 @@ def loadReminders(fn):
    for line in f: 
       line = line.strip()
       if line: 
-         tellee, teller, verb, timenow, msg = line.split('\t', 4)
+         try: tellee, teller, verb, timenow, msg = line.split('\t', 4)
+         except ValueError: continue # @@ hmm
          result.setdefault(tellee, []).append((teller, verb, timenow, msg))
    f.close()
    return result
