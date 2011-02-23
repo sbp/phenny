@@ -82,13 +82,13 @@ def f_remind(phenny, input):
       if not phenny.reminders.has_key(tellee): 
          phenny.reminders[tellee] = [(teller, verb, timenow, msg)]
       else: 
-         if len(phenny.reminders[tellee]) >= maximum: 
-            warn = True
+         # if len(phenny.reminders[tellee]) >= maximum: 
+         #    warn = True
          phenny.reminders[tellee].append((teller, verb, timenow, msg))
       # @@ Stephanie's augmentation
       response = "I'll pass that on when %s is around." % tellee_original
-      if warn: response += (" I'll have to use a pastebin, though, so " + 
-                            "your message may get lost.")
+      # if warn: response += (" I'll have to use a pastebin, though, so " + 
+      #                       "your message may get lost.")
 
       rand = random.random()
       if rand > 0.9999: response = "yeah, yeah"
@@ -138,29 +138,9 @@ def message(phenny, input):
       phenny.say(line)
 
    if reminders[maximum:]: 
-      try: 
-         if origin.sender in lispchannels: 
-            chan = origin.sender
-         else: chan = 'None'
-
-         result = web.post('http://paste.lisp.org/submit', 
-            {'channel': chan, 
-             'username': phenny.nick, 
-             'title': 'Further Messages for %s' % tellee, 
-             'colorize': 'None', 
-             'text': '\n'.join(reminders[maximum:]) + '\n', 
-             'captcha': 'lisp', 
-             'captchaid': 'bdf447484f62a3e8b23816f9acee79d9'
-            }
-         )
-         uris = re.findall('http://paste.lisp.org/display/\d+', result)
-         uri = list(reversed(uris)).pop()
-         if not origin.sender in lispchannels: 
-            message = '%s: see %s for further messages' % (tellee, uri)
-            phenny.say(message)
-      except: 
-         error = '[Sorry, some messages were elided and lost...]'
-         phenny.say(error)
+      phenny.say('Further messages sent privately')
+      for line in reminders[maximum:]: 
+         phenny.msg(tellee, line)
 
    if len(phenny.reminders.keys()) != remkeys: 
       dumpReminders(phenny.tell_filename, phenny.reminders) # @@ tell

@@ -78,6 +78,8 @@ def c(phenny, input):
    answer = [p for p in parts if p.startswith('rhs: "')][0][6:]
    if answer: 
       answer = answer.decode('unicode-escape')
+      answer = ''.join(chr(ord(c)) for c in answer)
+      answer = answer.decode('utf-8')
       answer = answer.replace(u'\xc2\xa0', ',')
       answer = answer.replace('<sup>', '^(')
       answer = answer.replace('</sup>', ')')
@@ -97,7 +99,7 @@ def py(phenny, input):
 py.commands = ['py']
 
 def wa(phenny, input): 
-   query = input.group(2)
+   query = input.group(2).encode('utf-8')
    uri = 'http://tumbolia.appspot.com/wa/'
    answer = web.get(uri + web.urllib.quote(query))
    if answer: 

@@ -30,9 +30,9 @@ def mappings(uri):
 
 def service(phenny, input, command, args): 
    t = o.services[command]
-   template = t.replace('${args}', urllib.quote(args.encode('utf-8')))
-   template = template.replace('${nick}', urllib.quote(input.nick))
-   uri = template.replace('${sender}', urllib.quote(input.sender))
+   template = t.replace('${args}', urllib.quote(args.encode('utf-8'), ''))
+   template = template.replace('${nick}', urllib.quote(input.nick, ''))
+   uri = template.replace('${sender}', urllib.quote(input.sender, ''))
 
    info = web.head(uri)
    if isinstance(info, list): 
