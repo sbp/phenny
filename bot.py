@@ -40,7 +40,6 @@ class Phenny(irc.Bot):
       else: 
          for fn in self.config.enable: 
             filenames.append(os.path.join(home, 'modules', fn + '.py'))
-      # @@ exclude
 
       if hasattr(self.config, 'extra'): 
          for fn in self.config.extra: 
@@ -52,8 +51,10 @@ class Phenny(irc.Bot):
                      filenames.append(os.path.join(fn, n))
 
       modules = []
+      excluded_modules = getattr(self.config, 'exclude', [])
       for filename in filenames: 
          name = os.path.basename(filename)[:-3]
+         if name in excluded_modules: continue
          try: module = imp.load_source(name, filename)
          except Exception, e: 
             print >> sys.stderr, "Error loading %s: %s (in bot.py)" % (name, e)

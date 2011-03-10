@@ -86,5 +86,31 @@ def gcs(phenny, input):
    phenny.say(reply)
 gcs.commands = ['gcs', 'comp']
 
+r_bing = re.compile(r'<h3><a href="([^"]+)"')
+
+def bing(phenny, input): 
+   """Queries Bing for the specified input."""
+   query = input.group(2)
+   if query.startswith(':'): 
+      lang, query = query.split(' ', 1)
+      lang = lang[1:]
+   else: lang = 'en-GB'
+   if not query:
+      return phenny.reply('.bing what?')
+
+   query = web.urllib.quote(query.encode('utf-8'))
+   base = 'http://www.bing.com/search?mkt=%s&q=' % lang
+   bytes = web.get(base + query)
+   m = r_bing.search(bytes)
+   if m: 
+      uri = m.group(1)
+      phenny.reply(uri)
+      if not hasattr(phenny.bot, 'last_seen_uri'):
+         phenny.bot.last_seen_uri = {}
+      phenny.bot.last_seen_uri[input.sender] = uri
+   else: phenny.reply("No results found for '%s'." % query)
+bing.commands = ['bing']
+bing.example = '.bing swhack'
+
 if __name__ == '__main__': 
    print __doc__.strip()

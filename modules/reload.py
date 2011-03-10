@@ -47,6 +47,7 @@ def f_reload(phenny, input):
 f_reload.name = 'reload'
 f_reload.rule = ('$nick', ['reload'], r'(\S+)?')
 f_reload.priority = 'low'
+f_reload.thread = False
 
 if __name__ == '__main__': 
    print __doc__.strip()
