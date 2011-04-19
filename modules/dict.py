@@ -22,6 +22,8 @@ r_info = re.compile(
 )
 
 def dict(phenny, input): 
+   if not input.group(2):
+      return phenny.reply("Nothing to define.")
    word = input.group(2)
    word = urllib.quote(word.encode('utf-8'))
 
