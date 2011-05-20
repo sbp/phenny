@@ -127,7 +127,8 @@ def wikipedia(term, language='en', last=False):
       sentence = ' '.join(words) + ' [...]'
 
    if (('using the Article Wizard if you wish' in sentence)
-    or ('or add a request for it' in sentence)): 
+    or ('or add a request for it' in sentence)
+    or ('in existing articles' in sentence)): 
       if not last: 
          term = search(term)
          return wikipedia(term, language=language, last=True)

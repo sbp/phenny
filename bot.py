@@ -94,8 +94,8 @@ class Phenny(irc.Bot):
 
       def sub(pattern, self=self): 
          # These replacements have significant order
-         pattern = pattern.replace('$nickname', self.nick)
-         return pattern.replace('$nick', r'%s[,:] +' % self.nick)
+         pattern = pattern.replace('$nickname', re.escape(self.nick))
+         return pattern.replace('$nick', r'%s[,:] +' % re.escape(self.nick))
 
       for name, func in self.variables.iteritems(): 
          # print name, func
