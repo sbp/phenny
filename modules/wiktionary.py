@@ -72,6 +72,8 @@ def format(word, definitions, number=2):
    return result.strip(' .,')
 
 def w(phenny, input): 
+   if not input.group(2):
+      return phenny.reply("Nothing to define.")
    word = input.group(2)
    etymology, definitions = wiktionary(word)
    if not definitions: 

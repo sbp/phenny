@@ -84,6 +84,8 @@ r_query = re.compile(
 )
 
 def gcs(phenny, input): 
+   if not input.group(2):
+      return phenny.reply("Nothing to compare.")
    queries = r_query.findall(input.group(2))
    if len(queries) > 6: 
       return phenny.reply('Sorry, can only compare up to six things.')
