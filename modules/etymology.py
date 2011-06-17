@@ -46,7 +46,7 @@ def etymology(word):
       raise ValueError("Word too long: %s[...]" % word[:10])
    word = {'axe': 'ax/axe'}.get(word, word)
 
-   bytes = web.get(etyuri % word)
+   bytes = web.get(etyuri % web.urllib.quote(word))
    definitions = r_definition.findall(bytes)
 
    if not definitions: 
@@ -77,7 +77,7 @@ def etymology(word):
 def f_etymology(self, origin, match, args): 
    word = match.group(2)
 
-   try: result = etymology(word.encode('utf-8'))
+   try: result = etymology(word.encode('iso-8859-1'))
    except IOError: 
       msg = "Can't connect to etymonline.com (%s)" % (etyuri % word)
       self.msg(origin.sender, msg)
@@ -92,7 +92,7 @@ def f_etymology(self, origin, match, args):
       msg = 'Can\'t find the etymology for "%s". Try %s' % (word, uri)
       self.msg(origin.sender, msg)
 # @@ Cf. http://swhack.com/logs/2006-01-04#T01-50-22
-f_etymology.rule = (['ety'], r"([A-Za-z0-9' .-]+)$")
+f_etymology.rule = (['ety'], r"(.+?)$")
 f_etymology.thread = True
 f_etymology.priority = 'high'
 
