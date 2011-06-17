@@ -10,17 +10,31 @@ http://inamidst.com/phenny/
 import re
 import web
 
+class Grab(web.urllib.URLopener):
+   def __init__(self, *args):
+      self.version = 'Mozilla/5.0 (Phenny)'
+      web.urllib.URLopener.__init__(self, *args)
+      self.addheader('Referer', 'https://github.com/sbp/phenny')
+   def http_error_default(self, url, fp, errcode, errmsg, headers):
+      return web.urllib.addinfourl(fp, [headers, errcode], "http:" + url)
+
 def search(query): 
    """Search using AjaxSearch, and return its JSON."""
    uri = 'http://ajax.googleapis.com/ajax/services/search/web'
    args = '?v=1.0&safe=off&q=' + web.urllib.quote(query.encode('utf-8'))
+   handler = web.urllib._urlopener
+   web.urllib._urlopener = Grab()
    bytes = web.get(uri + args)
+   web.urllib._urlopener = handler
    return web.json(bytes)
 
 def result(query): 
    results = search(query)
    try: return results['responseData']['results'][0]['unescapedUrl']
    except IndexError: return None
+   except TypeError: 
+      print results
+      return False
 
 def count(query): 
    results = search(query)
@@ -48,6 +62,7 @@ def g(phenny, input):
       if not hasattr(phenny.bot, 'last_seen_uri'):
          phenny.bot.last_seen_uri = {}
       phenny.bot.last_seen_uri[input.sender] = uri
+   elif uri is False: phenny.reply("Problem getting data from Google.")
    else: phenny.reply("No results found for '%s'." % query)
 g.commands = ['g']
 g.priority = 'high'

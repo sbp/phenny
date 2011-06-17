@@ -90,7 +90,7 @@ c.commands = ['c']
 c.example = '.c 5 + 3'
 
 def py(phenny, input): 
-   query = input.group(2)
+   query = input.group(2).encode('utf-8')
    uri = 'http://tumbolia.appspot.com/py/'
    answer = web.get(uri + web.urllib.quote(query))
    if answer: 
