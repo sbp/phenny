@@ -92,5 +92,9 @@ def w(phenny, input):
 w.commands = ['w']
 w.example = '.w bailiwick'
 
+def encarta(phenny, input): 
+   return phenny.reply('Microsoft removed Encarta, try .w instead!')
+encarta.commands = ['dict']
+
 if __name__ == '__main__': 
    print __doc__.strip()

@@ -7,7 +7,7 @@ Licensed under the Eiffel Forum License 2.
 http://inamidst.com/phenny/
 """
 
-import re, urllib
+import re, urllib, gzip, StringIO
 import web
 
 wikiuri = 'http://%s.wikipedia.org/wiki/%s'
@@ -69,6 +69,13 @@ def wikipedia(term, language='en', last=False):
       u = wikiuri % (language, q)
       bytes = web.get(u)
    else: bytes = web.get(wikiuri % (language, term))
+
+   if bytes.startswith('\x1f\x8b\x08\x00\x00\x00\x00\x00'): 
+      f = StringIO.StringIO(bytes)
+      f.seek(0)
+      gzip_file = gzip.GzipFile(fileobj=f)
+      bytes = gzip_file.read()
+
    bytes = r_tr.sub('', bytes)
 
    if not last: 

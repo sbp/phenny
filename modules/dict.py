@@ -51,7 +51,6 @@ def dict(phenny, input):
    if result.endswith('-') and (len(result) < 30): 
       phenny.reply('Sorry, no definition found.')
    else: phenny.say(result)
-dict.commands = ['dict']
 
 if __name__ == '__main__': 
    print __doc__.strip()
