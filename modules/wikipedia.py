@@ -75,6 +75,8 @@ def wikipedia(term, language='en', last=False):
       f.seek(0)
       gzip_file = gzip.GzipFile(fileobj=f)
       bytes = gzip_file.read()
+      gzip_file.close()
+      f.close()
 
    bytes = r_tr.sub('', bytes)
 
