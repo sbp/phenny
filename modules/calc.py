@@ -105,7 +105,7 @@ def wa(phenny, input):
       return phenny.reply("No search term.")
    query = input.group(2).encode('utf-8')
    uri = 'http://tumbolia.appspot.com/wa/'
-   answer = web.get(uri + web.urllib.quote(query))
+   answer = web.get(uri + web.urllib.quote(query.replace('+', '%2B')))
    if answer: 
       phenny.say(answer)
    else: phenny.reply('Sorry, no result.')

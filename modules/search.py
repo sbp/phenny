@@ -129,5 +129,24 @@ def bing(phenny, input):
 bing.commands = ['bing']
 bing.example = '.bing swhack'
 
+r_ddg = re.compile(r'nofollow" class="[^"]+" href="(.*?)">')
+
+def ddg(phenny, input): 
+   query = input.group(2)
+   if not query: return phenny.reply('.ddg what?')
+
+   query = web.urllib.quote(query.encode('utf-8'))
+   uri = 'http://duckduckgo.com/html/?q=%s&kl=uk-en' % query
+   bytes = web.get(uri)
+   m = r_ddg.search(bytes)
+   if m: 
+      uri = m.group(1)
+      phenny.reply(uri)
+      if not hasattr(phenny.bot, 'last_seen_uri'):
+         phenny.bot.last_seen_uri = {}
+      phenny.bot.last_seen_uri[input.sender] = uri
+   else: phenny.reply("No results found for '%s'." % query)
+ddg.commands = ['ddg']
+
 if __name__ == '__main__': 
    print __doc__.strip()
