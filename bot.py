@@ -55,6 +55,8 @@ class Phenny(irc.Bot):
       for filename in filenames: 
          name = os.path.basename(filename)[:-3]
          if name in excluded_modules: continue
+         # if name in sys.modules: 
+         #    del sys.modules[name]
          try: module = imp.load_source(name, filename)
          except Exception, e: 
             print >> sys.stderr, "Error loading %s: %s (in bot.py)" % (name, e)

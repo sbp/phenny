@@ -122,6 +122,7 @@ def message(phenny, input):
    tellee = input.nick
    channel = input.sender
 
+   if not os: return
    if not os.path.exists(phenny.tell_filename): 
       return
 

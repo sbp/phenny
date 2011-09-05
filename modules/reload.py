@@ -19,6 +19,8 @@ def f_reload(phenny, input):
       return phenny.reply('What?')
 
    if (not name) or (name == '*'): 
+      phenny.variables = None
+      phenny.commands = None
       phenny.setup()
       return phenny.reply('done')
 

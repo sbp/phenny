@@ -81,7 +81,7 @@ def o(phenny, input):
       return phenny.reply(msg)
 
    if not o.services.has_key(command): 
-      return phenny.reply('Sorry, no such service. See %s' % o.serviceURI)
+      return phenny.reply('Service not found in %s' % o.serviceURI)
 
    if hasattr(phenny.config, 'external'): 
       default = phenny.config.external.get('*')
