@@ -1,0 +1,26 @@
+#!/bin/bash
+# project
+# Copyright 2008, Sean B. Palmer, inamidst.com
+# Licensed under the Eiffel Forum License 2.
+
+# archive - Create phenny.tar.bz2 using git archive
+function archive() {
+   git archive --format=tar --prefix=phenny/ HEAD | bzip2 > phenny.tar.bz2
+}
+
+# commit - Check the code into git and push to github
+function commit() {
+   git commit -a && git push origin master
+}
+
+# log - Show a log of recent updates
+function history() {
+   git log --pretty=oneline --no-merges -10
+}
+
+# help - Show functions in project script
+function help() {
+   egrep '^# [a-z]+ - ' $0 | sed 's/# //'
+}
+
+eval "$1"
