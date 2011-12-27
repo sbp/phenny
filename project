@@ -13,7 +13,7 @@ function commit() {
    git commit -a && git push origin master
 }
 
-# log - Show a log of recent updates
+# history - Show a log of recent updates
 function history() {
    git log --pretty=oneline --no-merges -10
 }
