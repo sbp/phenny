@@ -20,6 +20,8 @@ class Grab(web.urllib.URLopener):
 
 def google_ajax(query): 
    """Search using AjaxSearch, and return its JSON."""
+   if isinstance(query, unicode): 
+      query = query.encode('utf-8')
    uri = 'http://ajax.googleapis.com/ajax/services/search/web'
    args = '?v=1.0&safe=off&q=' + web.urllib.quote(query)
    handler = web.urllib._urlopener
