@@ -90,7 +90,7 @@ def tr2(phenny, input):
          command = cmd
    phrase = command
 
-   if (len(phrase) > 350) and (not context.admin): 
+   if (len(phrase) > 350) and (not input.admin): 
       return phenny.reply('Phrase must be under 350 characters.')
 
    src, dest = args

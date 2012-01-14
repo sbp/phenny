@@ -18,39 +18,39 @@ def setup(phenny):
       try: refresh_delay = float(phenny.config.refresh_delay)
       except: pass
 
-   def close():
-      print "Nobody PONGed our PING, restarting"
-      phenny.handle_close()
+      def close():
+         print "Nobody PONGed our PING, restarting"
+         phenny.handle_close()
       
-   def pingloop():
-      timer = threading.Timer(refresh_delay, close, ())
-      phenny.data['startup.setup.timer'] = timer
-      phenny.data['startup.setup.timer'].start()
-      # print "PING!"
-      phenny.write(('PING', phenny.config.host))
-   phenny.data['startup.setup.pingloop'] = pingloop
+      def pingloop():
+         timer = threading.Timer(refresh_delay, close, ())
+         phenny.data['startup.setup.timer'] = timer
+         phenny.data['startup.setup.timer'].start()
+         # print "PING!"
+         phenny.write(('PING', phenny.config.host))
+      phenny.data['startup.setup.pingloop'] = pingloop
 
-   def pong(phenny, input):
-      try:
-         # print "PONG!"
-         phenny.data['startup.setup.timer'].cancel()
-         time.sleep(refresh_delay + 60.0)
-         pingloop()
-      except: pass
-   pong.event = 'PONG'
-   pong.thread = True
-   pong.rule = r'.*'
-   phenny.variables['pong'] = pong
+      def pong(phenny, input):
+         try:
+            # print "PONG!"
+            phenny.data['startup.setup.timer'].cancel()
+            time.sleep(refresh_delay + 60.0)
+            pingloop()
+         except: pass
+      pong.event = 'PONG'
+      pong.thread = True
+      pong.rule = r'.*'
+      phenny.variables['pong'] = pong
 
-   # Need to wrap handle_connect to start the loop.
-   inner_handle_connect = phenny.handle_connect
+      # Need to wrap handle_connect to start the loop.
+      inner_handle_connect = phenny.handle_connect
 
-   def outer_handle_connect():
-      inner_handle_connect()
-      if phenny.data.get('startup.setup.pingloop'):
-         phenny.data['startup.setup.pingloop']()
+      def outer_handle_connect():
+         inner_handle_connect()
+         if phenny.data.get('startup.setup.pingloop'):
+            phenny.data['startup.setup.pingloop']()
 
-   phenny.handle_connect = outer_handle_connect
+      phenny.handle_connect = outer_handle_connect
 
 def startup(phenny, input): 
    if hasattr(phenny.config, 'serverpass'): 
