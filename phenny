@@ -118,7 +118,8 @@ def main(argv=None):
    # Step Two: Check Dependencies
 
    check_python_version() # require python2.4 or later
-   check_dotdir() # require ~/.phenny, or make it and exit
+   if not opts.config:
+      check_dotdir() # require ~/.phenny, or make it and exit
 
    # Step Three: Load The Configurations
 
