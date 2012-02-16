@@ -53,16 +53,19 @@ def setup(phenny):
       phenny.handle_connect = outer_handle_connect
 
 def startup(phenny, input): 
+   import time
+
    if hasattr(phenny.config, 'serverpass'): 
       phenny.write(('PASS', phenny.config.serverpass))
 
    if hasattr(phenny.config, 'password'): 
       phenny.msg('NickServ', 'IDENTIFY %s' % phenny.config.password)
-      __import__('time').sleep(5)
+      time.sleep(5)
 
    # Cf. http://swhack.com/logs/2005-12-05#T19-32-36
    for channel in phenny.channels: 
       phenny.write(('JOIN', channel))
+      time.sleep(0.5)
 startup.rule = r'(.*)'
 startup.event = '251'
 startup.priority = 'low'
