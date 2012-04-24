@@ -59,6 +59,14 @@ def create_default_config(fn):
    """)
    f.close()
 
+def create_default_config_file(dotdir):
+   print 'Creating a default config file at ~/.phenny/default.py...'
+   default = os.path.join(dotdir, 'default.py')
+   create_default_config(default)
+
+   print 'Done; now you can edit default.py, and run phenny! Enjoy.'
+   sys.exit(0)
+
 def create_dotdir(dotdir): 
    print 'Creating a config directory at ~/.phenny...'
    try: os.mkdir(dotdir)
@@ -68,16 +76,15 @@ def create_dotdir(dotdir):
       print >> sys.stderr, 'Please fix this and then run phenny again.'
       sys.exit(1)
 
-   print 'Creating a default config file at ~/.phenny/default.py...'
-   default = os.path.join(dotdir, 'default.py')
-   create_default_config(default)
-
-   print 'Done; now you can edit default.py, and run phenny! Enjoy.'
-   sys.exit(0)
+   create_default_config_file(dotdir)
 
 def check_dotdir(): 
+   default = os.path.join(dotdir, 'default.py')
+
    if not os.path.isdir(dotdir): 
       create_dotdir(dotdir)
+   elif not os.path.isfile(default): 
+      create_default_config_file(dotdir)
 
 def config_names(config): 
    config = config or 'default'
