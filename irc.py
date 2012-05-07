@@ -42,6 +42,11 @@ class Bot(asynchat.async_chat):
       import threading
       self.sending = threading.RLock()
 
+   def initiate_send(self):
+      self.sending.acquire()
+      asynchat.async_chat.initiate_send(self)
+      self.sending.release()
+
    # def push(self, *args, **kargs): 
    #    asynchat.async_chat.push(self, *args, **kargs)
 
