@@ -119,6 +119,8 @@ def bing_search(query, lang='en-GB'):
 
 def bing(phenny, input): 
    """Queries Bing for the specified input."""
+   return phenny.reply("Sorry, .bing is disabled pending a QA review.")
+
    query = input.group(2)
    if query.startswith(':'): 
       lang, query = query.split(' ', 1)
