@@ -75,7 +75,9 @@ def twitter(phenny, input):
    elif r_username.match(arg):
       phenny.say(user_tweet(arg))
    elif r_link.match(arg):
-      phenny.say(read_tweet(arg))
+      username = arg.split('/')[3]
+      tweet = read_tweet(arg)
+      phenny.say(format(tweet, username))
    else: phenny.reply("Give me a link, a username, or a tweet id")
 
 twitter.commands = ['tw', 'twitter']

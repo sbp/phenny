@@ -70,10 +70,10 @@ def etymology(word):
       return None
    sentence = m.group(0)
 
-   try: 
-      sentence = unicode(sentence, 'iso-8859-1')
-      sentence = sentence.encode('utf-8')
-   except: pass
+   # try: 
+   #    sentence = unicode(sentence, 'iso-8859-1')
+   #    sentence = sentence.encode('utf-8')
+   # except: pass
    sentence = web.decode(sentence)
 
    maxlength = 275

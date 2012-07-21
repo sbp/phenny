@@ -75,7 +75,10 @@ tr.priority = 'low'
 
 def tr2(phenny, input): 
    """Translates a phrase, with an optional language hint."""
-   command = input.group(2).encode('utf-8')
+   command = input.group(2)
+   if not command:
+      return phenny.reply("Need something to translate!")
+   command = command.encode('utf-8')
 
    def langcode(p): 
       return p.startswith(':') and (2 < len(p) < 10) and p[1:].isalpha()
