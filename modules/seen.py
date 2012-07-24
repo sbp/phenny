@@ -27,7 +27,7 @@ def seen(phenny, input):
       msg = "I last saw %s at %s on %s" % (nick, t, channel)
       phenny.reply(msg)
    else: phenny.reply("Sorry, I haven't seen %s around." % nick)
-seen.rule = (['seen'], r'(\S+)')'
+seen.rule = (['seen'], r'(\S+)')
 
 @deprecated
 def f_note(self, origin, match, args): 
