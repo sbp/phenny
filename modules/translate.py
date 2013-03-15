@@ -93,8 +93,8 @@ def tr2(phenny, input):
          command = cmd
    phrase = command
 
-   if (len(phrase) > 350) and (not input.admin): 
-      return phenny.reply('Phrase must be under 350 characters.')
+   # if (len(phrase) > 350) and (not input.admin): 
+   #    return phenny.reply('Phrase must be under 350 characters.')
 
    src, dest = args
    if src != dest: 
@@ -103,6 +103,7 @@ def tr2(phenny, input):
          msg = msg.decode('utf-8')
       if msg: 
          msg = web.decode(msg) # msg.replace('&#39;', "'")
+         if len(msg) > 450: msg = msg[:450] + '[...]'
          msg = '"%s" (%s to %s, translate.google.com)' % (msg, src, dest)
       else: msg = 'The %s to %s translation failed, sorry!' % (src, dest)
 
@@ -113,22 +114,30 @@ tr2.commands = ['tr']
 tr2.priority = 'low'
 
 def mangle(phenny, input): 
+   import time
+
    phrase = input.group(2).encode('utf-8')
    for lang in ['fr', 'de', 'es', 'it', 'ja']: 
-      backup = phrase
-      phrase = translate(phrase, 'en', lang)
-      if not phrase: 
-         phrase = backup
-         break
-      __import__('time').sleep(0.5)
+      backup = phrase[:]
+      phrase, _lang = translate(phrase, 'en', lang)
+      phrase = phrase.encode("utf-8")
 
-      backup = phrase
-      phrase = translate(phrase, lang, 'en')
       if not phrase: 
-         phrase = backup
+         phrase = backup[:]
          break
-      __import__('time').sleep(0.5)
+      time.sleep(0.25)
 
+      backup = phrase[:]
+      phrase, _lang = translate(phrase, lang, 'en')
+      phrase = phrase.encode("utf-8")
+
+      if not phrase: 
+         phrase = backup[:]
+         break
+      time.sleep(0.25)
+
+   phrase = phrase.replace(' ,', ',').replace(' .', '.')
+   phrase = phrase.strip(' ,')
    phenny.reply(phrase or 'ERRORS SRY')
 mangle.commands = ['mangle']
 

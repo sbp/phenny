@@ -36,7 +36,10 @@ def dump_database(name, data):
 
 def setup(phenny): 
    phenny.rfn = filename(phenny)
+
+   # phenny.sending.acquire()
    phenny.rdb = load_database(phenny.rfn)
+   # phenny.sending.release()
 
    def monitor(phenny): 
       time.sleep(5)
@@ -51,7 +54,10 @@ def setup(phenny):
                      phenny.msg(channel, nick + ': ' + message)
                   else: phenny.msg(channel, nick + '!')
                del phenny.rdb[oldtime]
+
+            # phenny.sending.acquire()
             dump_database(phenny.rfn, phenny.rdb)
+            # phenny.sending.release()
          time.sleep(2.5)
 
    targs = (phenny,)
@@ -131,6 +137,57 @@ def remind(phenny, input):
       phenny.reply('Okay, will remind%s' % w)
    else: phenny.reply('Okay, will remind in %s secs' % duration)
 remind.commands = ['in']
+
+r_time = re.compile(r'^([0-9]{2}[:.][0-9]{2})')
+r_zone = re.compile(r'( ?([A-Za-z]+|[+-]\d\d?))')
+
+import calendar
+from clock import TimeZones
+
+def at(phenny, input):
+   bytes = input[4:]
+
+   m = r_time.match(bytes)
+   if not m: 
+      return phenny.reply("Sorry, didn't understand the time spec.")
+   t = m.group(1).replace('.', ':')
+   bytes = bytes[len(t):]
+
+   m = r_zone.match(bytes)
+   if not m: 
+      return phenny.reply("Sorry, didn't understand the zone spec.")
+   z = m.group(2)
+   bytes = bytes[len(m.group(1)):].strip().encode("utf-8")
+
+   if z.startswith('+') or z.startswith('-'):
+      tz = int(z)
+
+   if TimeZones.has_key(z):
+      tz = TimeZones[z]
+   else: return phenny.reply("Sorry, didn't understand the time zone.")
+
+   d = time.strftime("%Y-%m-%d", time.gmtime())
+   d = time.strptime(("%s %s" % (d, t)).encode("utf-8"), "%Y-%m-%d %H:%M")
+
+   d = int(calendar.timegm(d) - (3600 * tz))
+   duration = int((d - time.time()) / 60)
+
+   if duration < 1:
+      return phenny.reply("Sorry, that date is this minute or in the past. And only times in the same day are supported!")
+
+   # phenny.say("%s %s %s" % (t, tz, d))
+
+   reminder = (input.sender, input.nick, bytes)
+   # phenny.say(str((d, reminder)))
+   try: phenny.rdb[d].append(reminder)
+   except KeyError: phenny.rdb[d] = [reminder]
+
+   phenny.sending.acquire()
+   dump_database(phenny.rfn, phenny.rdb)
+   phenny.sending.release()
+
+   phenny.reply("Reminding at %s %s - in %s minute(s)" % (t, z, duration))
+at.commands = ['at']
 
 if __name__ == '__main__': 
    print __doc__.strip()

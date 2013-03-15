@@ -84,7 +84,7 @@ def etymology(word):
       sentence = ' '.join(words) + ' [...]'
 
    sentence = '"' + sentence.replace('"', "'") + '"'
-   return sentence + ' - etymonline.com'
+   return sentence + ' - ' + ('http://etymonline.com/index.php?term=%s' % web.urllib.quote(word))
 
 @deprecated
 def f_etymology(self, origin, match, args): 
@@ -102,7 +102,7 @@ def f_etymology(self, origin, match, args):
       self.msg(origin.sender, result)
    else: 
       uri = etysearch % word
-      msg = 'Can\'t find the etymology for "%s". Try %s' % (word, uri)
+      msg = 'Can\'t find the etymology for "%s". Try %s' % (word, ('http://etymonline.com/index.php?term=%s' % web.urllib.quote(word)))
       self.msg(origin.sender, msg)
 # @@ Cf. http://swhack.com/logs/2006-01-04#T01-50-22
 f_etymology.rule = (['ety'], r"(.+?)$")

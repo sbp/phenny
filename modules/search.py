@@ -204,8 +204,28 @@ suggest.commands = ['suggest']
 def new_gc(query):
    uri = 'https://www.google.com/search?hl=en&q='
    uri = uri + web.urllib.quote(query).replace('+', '%2B')
-   if '"' in query: uri += '&tbs=li:1'
+   # if '"' in query: uri += '&tbs=li:1'
    bytes = web.get(uri)
+   if "did not match any documents" in bytes:
+      return "0"
+   for result in re.compile(r'(?ims)([0-9,]+) results?').findall(bytes):
+      return result
+   return None
+
+def newest_gc(query):
+   uri = 'https://www.google.com/search?hl=en&q='
+   uri = uri + web.urllib.quote(query).replace('+', '%2B')
+   bytes = web.get(uri + '&tbs=li:1')
+   if "did not match any documents" in bytes:
+      return "0"
+   for result in re.compile(r'(?ims)([0-9,]+) results?').findall(bytes):
+      return result
+   return None
+
+def newerest_gc(query):
+   uri = 'https://www.google.com/search?hl=en&q='
+   uri = uri + web.urllib.quote(query).replace('+', '%2B')
+   bytes = web.get(uri + '&prmd=imvns&start=950')
    if "did not match any documents" in bytes:
       return "0"
    for result in re.compile(r'(?ims)([0-9,]+) results?').findall(bytes):
@@ -229,9 +249,13 @@ def gc(phenny, input):
    if not input.group(2):
       return phenny.reply("No query term.")
    query = input.group(2).encode('utf-8')
-   old = old_gc(query) or "?"
-   new = new_gc(query) or "?"
-   phenny.say(query + ": " + old + " / " + new)
+   result = query + ": "
+   result += (old_gc(query) or "?") + " (api)"
+   result += ", " + (newerest_gc(query) or "?") + " (end)"
+   result += ", " + (new_gc(query) or "?") + " (site)"
+   if '"' in query:
+      result += ", " + (newest_gc(query) or "?") + " (verbatim)"
+   phenny.say(result)
 
 gc.commands = ['gc']
 gc.priority = 'high'

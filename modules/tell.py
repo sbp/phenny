@@ -131,9 +131,13 @@ def message(phenny, input):
    for remkey in remkeys: 
       if not remkey.endswith('*') or remkey.endswith(':'): 
          if tellee.lower() == remkey: 
+            phenny.sending.acquire()
             reminders.extend(getReminders(phenny, channel, remkey, tellee))
-      elif tellee.lower().startswith(remkey.rstrip('*:')): 
+            phenny.sending.release()
+      elif tellee.lower().strip("0123456789_-[]`") == remkey.rstrip('*:'): 
+         phenny.sending.acquire()
          reminders.extend(getReminders(phenny, channel, remkey, tellee))
+         phenny.sending.release()
 
    for line in reminders[:maximum]: 
       phenny.say(line)
@@ -144,7 +148,9 @@ def message(phenny, input):
          phenny.msg(tellee, line)
 
    if len(phenny.reminders.keys()) != remkeys: 
+      phenny.sending.acquire()
       dumpReminders(phenny.tell_filename, phenny.reminders) # @@ tell
+      phenny.sending.release()
 message.rule = r'(.*)'
 message.priority = 'low'
 
