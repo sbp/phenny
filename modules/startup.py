@@ -10,6 +10,7 @@ http://inamidst.com/phenny/
 import threading, time
 
 def setup(phenny): 
+   print("Setting up phenny")
    # by clsn
    phenny.data = {}
    refresh_delay = 300.0
@@ -42,18 +43,12 @@ def setup(phenny):
       pong.rule = r'.*'
       phenny.variables['pong'] = pong
 
-      # Need to wrap handle_connect to start the loop.
-      inner_handle_connect = phenny.handle_connect
-
-      def outer_handle_connect():
-         inner_handle_connect()
-         if phenny.data.get('startup.setup.pingloop'):
-            phenny.data['startup.setup.pingloop']()
-
-      phenny.handle_connect = outer_handle_connect
-
 def startup(phenny, input): 
    import time
+
+   # Start the ping loop. Has to be done after USER on e.g. quakenet
+   if phenny.data.get('startup.setup.pingloop'):
+      phenny.data['startup.setup.pingloop']()
 
    if hasattr(phenny.config, 'serverpass'): 
       phenny.write(('PASS', phenny.config.serverpass))
